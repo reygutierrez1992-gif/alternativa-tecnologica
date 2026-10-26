@@ -1,1 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
+<title>Alternativa Tecnológica</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f5f7fb;
+}
+
+header{
+    background:#0d47a1;
+    color:white;
+    text-align:center;
+    padding:30px;
+}
+
+header h1{
+    margin:0;
+}
+
+nav{
+    background:white;
+    padding:15px;
+    text-align:center;
+}
+
+nav a{
+    margin:0 10px;
+    text-decoration:none;
+    color:#0d47a1;
+    font-weight:bold;
+}
+
+section{
+    max-width:1200px;
+    margin:auto;
+    padding:30px;
+}
+
+.boton{
+    display:inline-block;
+    background:#0d47a1;
+    color:white;
+    padding:12px 25px;
+    border-radius:5px;
+    text-decoration:none;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border-radius:10px;
+    padding:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+.categoria{
+    color:#666;
+    font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Alternativa Tecnológica</h1>
+    <p>Centro de Estudiantes</p>
+</header>
+
+<nav>
+    <a href="#becas">Becas</a>
+    <a href="#club">Club Alternativa</a>
+</nav>
+
+<section id="becas">
+
+<h2>📚 Becas de Fotocopias</h2>
+
+<p>
+Participá de las becas mensuales de fotocopias.
+</p>
+
+<a class="boton" href="#" target="_blank">
+Inscribirme
+</a>
+
+</section>
+
+<section id="club">
+
+<h2>🏪 Club Alternativa Tecnológica</h2>
+
+<div id="locales" class="grid"></div>
+
+</section>
+
+<script>
+
+fetch('data/locales.json')
+.then(r=>r.json())
+.then(data=>{
+
+    const cont = document.getElementById('locales');
+
+    data.locales.forEach(local=>{
+
+        if(!local.activo) return;
+
+        cont.innerHTML += `
+        <div class="card">
+            <h3>${local.nombre}</h3>
+            <div class="categoria">${local.categoria}</div>
+            <p>${local.descripcion}</p>
+
+            <p><b>Descuento:</b><br>${local.descuento}</p>
+
+            <p><b>Horario:</b><br>${local.horario || 'No informado'}</p>
+        </div>
+        `;
+    });
+
+});
+
+</script>
+
+</body>
+</html>
