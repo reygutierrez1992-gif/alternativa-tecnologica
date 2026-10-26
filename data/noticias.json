@@ -1,1 +1,14 @@
-
+{
+  "noticias": [
+    {
+      "titulo": "Inscripciones abiertas",
+      "fecha": "2026-10-26",
+      "contenido": "Ya se encuentran abiertas las inscripciones para las becas de fotocopias."
+    },
+    {
+      "titulo": "Nuevo convenio",
+      "fecha": "2026-10-25",
+      "contenido": "Palito se suma al Club Alternativa Tecnológica con beneficios para estudiantes."
+    }
+  ]
+}
