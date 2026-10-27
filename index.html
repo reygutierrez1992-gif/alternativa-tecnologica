@@ -4,6 +4,59 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Alternativa Tecnológica</title>
+<style>
+:root{--azul:#3f7ad8;--violeta:#7b57d8;--fondo:#f4f6fb;--texto:#1f2937}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Segoe UI,Arial,sans-serif;background:var(--fondo);color:var(--texto)}
+header{background:linear-gradient(135deg,var(--azul),var(--violeta));color:#fff;text-align:center;padding:50px 20px}
+header img{width:220px;max-width:90%;background:#fff;border-radius:20px;padding:15px}
+header h1{margin-top:20px;font-size:3rem}
+header p{font-size:1.4rem;margin-top:10px}
+nav{position:sticky;top:0;background:#fff;padding:15px;display:flex;justify-content:center;gap:20px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+nav a{text-decoration:none;color:var(--azul);font-weight:bold}
+section{max-width:1200px;margin:auto;padding:50px 20px}
+h2{text-align:center;color:var(--azul);margin-bottom:25px}
+.card{background:#fff;border-radius:16px;padding:25px;box-shadow:0 3px 10px rgba(0,0,0,.08)}
+.btn{display:inline-block;background:linear-gradient(135deg,var(--azul),var(--violeta));color:#fff;padding:14px 24px;border-radius:10px;text-decoration:none;margin-top:15px}
+#buscar{width:100%;padding:12px;border-radius:10px;border:1px solid #ddd;margin-bottom:15px}
+#categorias{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+#categorias button{padding:10px 15px;border:none;border-radius:8px;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.local,.noticia{background:#fff;padding:20px;border-radius:15px;box-shadow:0 3px 10px rgba(0,0,0,.08)}
+footer{background:#1f2937;color:#fff;text-align:center;padding:30px}
+</style>
+</head>
+<body>
+<header>
+<img src="images/logo-at.jpeg" alt="AT">
+<h1>Alternativa Tecnológica</h1>
+<p>Pensá diferente</p>
+</header>
+<nav>
+<a href="#becas">📚 Becas</a>
+<a href="#club">🏪 Club AT</a>
+<a href="#noticias">📰 Novedades</a>
+<a href="#contacto">📞 Contacto</a>
+</nav>
+<section id="becas"><h2>📚 Becas de Fotocopias</h2><div class="card"><p>Participá del sorteo mensual para estudiantes de Ingeniería.</p><a class="btn" target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSer6WElUswfUrwqGwbfK18cIu56qMEoMK_ME8AEYEz2NlQaHw/viewform?fbzx=-1757344560568234703">Inscribirme</a></div></section>
+<section id="club"><h2>🏪 Club Alternativa Tecnológica</h2><input id="buscar" placeholder="Buscar local o categoría"><div id="categorias"></div><div id="locales" class="grid"></div></section>
+<section id="noticias"><h2>📰 Noticias y Novedades</h2><div id="listaNoticias" class="grid"></div></section>
+<section id="contacto"><h2>📞 Contacto</h2><div class="card"><p>Instagram: @alternativatecnologica</p></div></section>
+<footer><p>Alternativa Tecnológica • Pensá diferente</p></footer>
+<script>
+let locales=[];
+fetch('datos/locales.json').then(r=>r.json()).then(d=>{locales=d.locales||[];const cats=['Todos',...(d.categorias||[])];document.getElementById('categorias').innerHTML=cats.map(c=>`<button onclick="filtrar('${c}')">${c}</button>`).join('');mostrar(locales);});
+function mostrar(arr){document.getElementById('locales').innerHTML=arr.map(l=>`<div class='local'><h3>${l.nombre}</h3><p><b>${l.categoria}</b></p><p>${l.descripcion||''}</p><br><p><b>Descuento:</b> ${l.descuento||''}</p><p><b>Horario:</b> ${l.horario||'No informado'}</p></div>`).join('');}
+function filtrar(c){if(c==='Todos')return mostrar(locales);mostrar(locales.filter(x=>x.categoria===c));}
+document.getElementById('buscar').addEventListener('input',e=>{const t=e.target.value.toLowerCase();mostrar(locales.filter(x=>(x.nombre||'').toLowerCase().includes(t)||(x.categoria||'').toLowerCase().includes(t)));});
+fetch('datos/noticias.json').then(r=>r.json()).then(d=>{document.getElementById('listaNoticias').innerHTML=(d.noticias||[]).map(n=>`<div class='noticia'><h3>${n.titulo}</h3><small>${n.fecha}</small><p style='margin-top:10px'>${n.contenido}</p></div>`).join('');}).catch(()=>{});
+</script>
+</body></html><!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alternativa Tecnológica</title>
 </head>
 
 <body style="font-family:Arial;text-align:center;padding:50px;background:#f4f6fb;">
