@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html><head><base target="_top"><meta charset="utf-8">
+<style>
+body{margin:0;font-family:Arial,sans-serif;color:#fff;background:linear-gradient(160deg,#1c2a52,#4a2a7a);text-align:center;overflow:hidden}
+#w{padding:18px}h2{margin:6px 0;color:#cdd6f6;font-size:18px}
+#ctl{margin:14px 0}input{width:80px;font-size:20px;padding:6px;border-radius:8px;border:0;text-align:center}
+button{font-size:16px;font-weight:bold;padding:10px 22px;border:0;border-radius:10px;color:#fff;background:linear-gradient(90deg,#4a78c2,#7b57b8);cursor:pointer}
+button:disabled{opacity:.5}#slot{font-size:30px;font-weight:bold;min-height:44px;margin:16px 0}
+#slot.fin{animation:pop .5s}@keyframes pop{50%{transform:scale(1.2)}}
+#lista{max-height:300px;overflow:auto;font-size:16px;text-align:left;display:inline-block;min-width:380px}
+#lista div{padding:3px 0;border-bottom:1px solid rgba(255,255,255,.15)}#err{color:#ffb4ab;margin-top:8px}
+.cf{position:fixed;top:-20px;width:9px;height:15px;animation:fall 2.2s ease-in forwards}@keyframes fall{to{transform:translate(var(--dx),110vh) rotate(720deg)}}
+</style></head><body><div id="w">
+<h2>Becas de fotocopias · Alternativa Tecnológica</h2>
+<div id="info">Cargando participantes…</div>
+<div id="ctl" hidden>Cantidad de ganadores: <input id="n" type="number" min="1" value="50"> <button id="go">Sortear</button></div>
+<div id="slot"></div><div id="lista"></div><div id="err"></div>
+</div>
+<script>
+var nombres=[];
+const $=function(s){return document.querySelector(s)},sleep=function(ms){return new Promise(function(r){setTimeout(r,ms)})};
+function esc(s){return String(s).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+google.script.run.withSuccessHandler(function(d){
+  nombres=d.nombres;$('#info').textContent='Participantes válidos disponibles: '+d.total;
+  $('#n').max=d.total;if(d.total<50)$('#n').value=Math.max(1,Math.min(d.total,5));$('#ctl').hidden=!d.total;
+}).withFailureHandler(function(e){$('#info').textContent='';$('#err').textContent=e.message}).datosSorteo();
+function confetti(){for(var i=0;i<50;i++){var s=document.createElement('i');s.className='cf';s.style.cssText='left:'+Math.random()*100+'%;background:'+['#4a78c2','#7b57b8','#f2b134','#fff'][i%4]+';animation-delay:'+Math.random()*.5+'s;--dx:'+(Math.random()*240-120)+'px';document.body.appendChild(s);setTimeout(function(){s.remove()},3000)}}
+$('#go').onclick=function(){
+  var n=Number($('#n').value);$('#go').disabled=true;$('#err').textContent='';
+  google.script.run.withSuccessHandler(async function(g){
+    $('#ctl').hidden=true;$('#info').textContent='¡Sorteando!';
+    var ms=g.length<=5?2800:(g.length<=20?1100:450);
+    for(var i=0;i<g.length;i++){
+      $('#slot').className='';var t0=Date.now();
+      while(Date.now()-t0<ms){$('#slot').textContent=nombres[Math.floor(Math.random()*nombres.length)]||'…';await sleep(60)}
+      $('#slot').textContent=g[i].n;$('#slot').className='fin';if(g.length<=20)confetti();
+      $('#lista').insertAdjacentHTML('afterbegin','<div>'+(i+1)+'. '+esc(g[i].n)+' · legajo '+g[i].l+'</div>');await sleep(g.length<=20?1500:200);
+    }
+    confetti();$('#info').textContent='¡Felicitaciones! Los ganadores quedaron guardados en la hoja "Ganadores".';$('#slot').textContent='';
+  }).withFailureHandler(function(e){$('#err').textContent=e.message;$('#go').disabled=false}).sortear(n);
+};
+</script></body></html>

@@ -1,0 +1,11 @@
+{
+ "actualizado": "2026-10-26T00:00:00Z",
+ "categorias": ["Gastronomía", "Librería", "Tecnología", "Salud y gimnasio", "Otro"],
+ "locales": [
+  {"id": "palito", "nombre": "Palito", "categoria": "Gastronomía", "descripcion": "Bar y restaurante frente a la facultad.", "imagen": "",
+   "menu": [{"n": "Ñoquis con salsa", "p": 4500, "d": 10, "a": true}, {"n": "Milanesa con papas", "p": 5200, "d": 0, "a": false}],
+   "novedades": "", "descuento": "10% presentando credencial", "condiciones": "Válido de lunes a viernes", "vigenteHasta": "", "horario": "Lun a Vie 8 a 23 hs", "direccion": "", "telefono": "", "activo": true},
+  {"id": "gym-demo", "nombre": "Gimnasio Demo", "categoria": "Salud y gimnasio", "descripcion": "Musculación y funcional.", "imagen": "", "menu": [],
+   "novedades": "", "descuento": "20% en la cuota mensual", "condiciones": "Presentando credencial de estudiante", "vigenteHasta": "", "horario": "", "direccion": "", "telefono": "", "activo": true}
+ ]
+}
