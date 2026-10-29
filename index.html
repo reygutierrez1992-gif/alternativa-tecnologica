@@ -51,4 +51,30 @@ function filtrar(c){if(c==='Todos')return mostrar(locales);mostrar(locales.filte
 document.getElementById('buscar').addEventListener('input',e=>{const t=e.target.value.toLowerCase();mostrar(locales.filter(x=>(x.nombre||'').toLowerCase().includes(t)||(x.categoria||'').toLowerCase().includes(t)));});
 fetch('datos/noticias.json').then(r=>r.json()).then(d=>{document.getElementById('listaNoticias').innerHTML=(d.noticias||[]).map(n=>`<div class='noticia'><h3>${n.titulo}</h3><small>${n.fecha}</small><p style='margin-top:10px'>${n.contenido}</p></div>`).join('');}).catch(()=>{});
 </script>
-</body></html>
+</body></html><!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alternativa Tecnológica</title>
+</head>
+
+<body style="font-family:Arial;text-align:center;padding:50px;background:#f4f6fb;">
+
+<img src="images/logo-at.jpeg" width="200">
+
+<h1>Alternativa Tecnológica</h1>
+
+<h2>Pensá diferente</h2>
+
+<p>
+Si ves esta pantalla, GitHub Pages está funcionando correctamente.
+</p>
+
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSer6WElUswfUrwqGwbfK18cIu56qMEoMK_ME8AEYEz2NlQaHw/viewform"
+target="_blank">
+Inscribirme en Becas
+</a>
+
+</body>
+</html>
