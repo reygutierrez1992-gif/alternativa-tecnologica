@@ -1,80 +1,161 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alternativa Tecnológica</title>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alternativa Tecnológica</title><link rel="icon" href="images/icono-at.png">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--azul:#3f7ad8;--violeta:#7b57d8;--fondo:#f4f6fb;--texto:#1f2937}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Segoe UI,Arial,sans-serif;background:var(--fondo);color:var(--texto)}
-header{background:linear-gradient(135deg,var(--azul),var(--violeta));color:#fff;text-align:center;padding:50px 20px}
-header img{width:220px;max-width:90%;background:#fff;border-radius:20px;padding:15px}
-header h1{margin-top:20px;font-size:3rem}
-header p{font-size:1.4rem;margin-top:10px}
-nav{position:sticky;top:0;background:#fff;padding:15px;display:flex;justify-content:center;gap:20px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
-nav a{text-decoration:none;color:var(--azul);font-weight:bold}
-section{max-width:1200px;margin:auto;padding:50px 20px}
-h2{text-align:center;color:var(--azul);margin-bottom:25px}
-.card{background:#fff;border-radius:16px;padding:25px;box-shadow:0 3px 10px rgba(0,0,0,.08)}
-.btn{display:inline-block;background:linear-gradient(135deg,var(--azul),var(--violeta));color:#fff;padding:14px 24px;border-radius:10px;text-decoration:none;margin-top:15px}
-#buscar{width:100%;padding:12px;border-radius:10px;border:1px solid #ddd;margin-bottom:15px}
-#categorias{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
-#categorias button{padding:10px 15px;border:none;border-radius:8px;cursor:pointer}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
-.local,.noticia{background:#fff;padding:20px;border-radius:15px;box-shadow:0 3px 10px rgba(0,0,0,.08)}
-footer{background:#1f2937;color:#fff;text-align:center;padding:30px}
-</style>
-</head>
-<body>
-<header>
-<img src="images/logo-at.jpeg" alt="AT">
-<h1>Alternativa Tecnológica</h1>
-<p>Pensá diferente</p>
-</header>
-<nav>
-<a href="#becas">📚 Becas</a>
-<a href="#club">🏪 Club AT</a>
-<a href="#noticias">📰 Novedades</a>
-<a href="#contacto">📞 Contacto</a>
-</nav>
-<section id="becas"><h2>📚 Becas de Fotocopias</h2><div class="card"><p>Participá del sorteo mensual para estudiantes de Ingeniería.</p><a class="btn" target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSer6WElUswfUrwqGwbfK18cIu56qMEoMK_ME8AEYEz2NlQaHw/viewform?fbzx=-1757344560568234703">Inscribirme</a></div></section>
-<section id="club"><h2>🏪 Club Alternativa Tecnológica</h2><input id="buscar" placeholder="Buscar local o categoría"><div id="categorias"></div><div id="locales" class="grid"></div></section>
-<section id="noticias"><h2>📰 Noticias y Novedades</h2><div id="listaNoticias" class="grid"></div></section>
-<section id="contacto"><h2>📞 Contacto</h2><div class="card"><p>Instagram: @alternativatecnologica</p></div></section>
-<footer><p>Alternativa Tecnológica • Pensá diferente</p></footer>
+:root{--azul:#3f7ad8;--violeta:#7b57d8;--az:#3f7ad8;--vi:#7b57d8;--navy:#1c2a52;--amb:#ffb84d;--fondo:#f5f6fd;--ink:#1f2937;--mut:#667085;--ln:#dde2ee;--g:linear-gradient(135deg,#3f7ad8,#7b57d8)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Sora,"Segoe UI",system-ui,sans-serif;background:var(--fondo);color:var(--ink);line-height:1.55;padding-bottom:90px}@media(min-width:760px){body{padding-bottom:0}}
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);box-shadow:0 2px 14px rgba(60,60,140,.1)}
+.tb{max-width:1180px;margin:auto;display:flex;align-items:center;gap:14px;padding:8px 18px}.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:.9rem;line-height:1.1;color:var(--navy)}.brand img{height:42px}
+nav{margin-left:auto;display:flex;gap:6px}nav button{border:0;background:none;font:inherit;font-weight:600;font-size:.92rem;color:var(--navy);padding:9px 15px;border-radius:99px;cursor:pointer;display:flex;gap:6px;align-items:center;transition:.15s}
+nav button i{font-style:normal}nav button:hover{background:#eceffc}nav button.on{background:var(--g);color:#fff;box-shadow:0 6px 16px rgba(91,87,216,.4)}
+@media(max-width:759px){.top{backdrop-filter:none;background:#fff}nav{position:fixed;left:10px;right:10px;bottom:10px;z-index:30;margin:0;background:#fff;border-radius:22px;padding:6px;justify-content:space-around;box-shadow:0 8px 30px rgba(40,40,110,.28)}nav button{flex-direction:column;gap:0;padding:7px 2px;font-size:.66rem;border-radius:16px;flex:1}nav button i{font-size:1.35rem}}
+#hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#e7eefd 0,#efe9fc 60%,#fdf1e3 100%)}
+#hero:before,#hero:after{content:"";position:absolute;background:var(--g);opacity:.13;clip-path:polygon(50% 0,100% 100%,0 100%)}
+#hero:before{width:380px;height:340px;right:-70px;top:-60px;transform:rotate(14deg)}#hero:after{width:200px;height:180px;left:-50px;bottom:-40px;transform:rotate(-12deg)}
+.hw{position:relative;z-index:1;max-width:1180px;margin:auto;padding:34px 20px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:28px;align-items:center}
+.hl{text-align:center}.hl img{width:min(340px,86%);filter:drop-shadow(0 14px 24px rgba(63,90,200,.25))}
+.pill{display:inline-block;background:#fff;color:var(--violeta);font-weight:700;font-size:.82rem;padding:6px 14px;border-radius:99px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.slogan{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800;line-height:1.05;margin:14px 0 10px;color:var(--navy)}.slogan em{font-style:normal;background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hr p{font-size:1.08rem;color:#445;max-width:46ch;margin:0 0 18px}@media(max-width:759px){.hw{grid-template-columns:1fr;text-align:center;padding:22px 18px}.hr p{margin:0 auto 18px}.hr .row{justify-content:center}}
+main{max-width:1180px;margin:auto;padding:36px 18px 60px}h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;color:var(--navy);margin:0 0 18px}h1:after{content:"";display:block;width:64px;height:5px;border-radius:9px;background:var(--g);margin-top:8px}
+h2{margin:1.3em 0 .5em;font-size:1.15rem;color:var(--violeta)}#cl h2{font-size:1.35rem;color:var(--navy)}.sm{color:var(--mut);font-size:.85rem}.lead{color:var(--mut);margin:-6px 0 20px;max-width:62ch}
+#aviso{background:var(--g);color:#fff;padding:10px 16px;text-align:center;font-weight:600}#aviso a{color:#fff;text-decoration:underline;cursor:pointer}
+.card{background:#fff;border-radius:20px;padding:24px;box-shadow:0 6px 22px rgba(60,60,140,.09)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:18px 0}.st{background:#fff;border-radius:20px;padding:22px;box-shadow:0 6px 22px rgba(60,60,140,.09);border-top:5px solid var(--azul)}
+.st b{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--g);color:#fff;font-size:1.1rem;margin-bottom:10px}.st h3{margin:0 0 4px;font-size:1.05rem}.st p{margin:0;color:var(--mut);font-size:.92rem}.st:nth-child(2){border-color:var(--violeta)}.st:nth-child(3){border-color:var(--amb)}
+.cr span{display:inline-block;background:#fff;border:1px solid var(--ln);border-radius:99px;padding:5px 14px;margin:6px 6px 0 0;font-size:.85rem}.cta{text-align:center;margin:22px 0 6px}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:600px){.g{grid-template-columns:1fr}}
+label{display:block;font-size:.85rem;color:var(--mut)}input,textarea,select{width:100%;margin-top:4px;padding:12px;border:1px solid var(--ln);border-radius:12px;font:inherit;background:#fff}
+textarea{min-height:90px}input:focus,textarea:focus,select:focus,button:focus-visible,a:focus-visible{outline:3px solid #b9c9ee;outline-offset:1px}
+#q{padding:15px 22px;border-radius:99px;border:2px solid transparent;box-shadow:0 6px 20px rgba(60,60,140,.12);font-size:1rem}#q:focus{border-color:var(--azul)}
+.btn{display:inline-block;border:0;border-radius:14px;padding:14px 26px;font:inherit;font-weight:700;color:#fff;background:var(--g);cursor:pointer;text-decoration:none;box-shadow:0 8px 20px rgba(91,87,216,.35);transition:.15s}.btn:hover{transform:translateY(-2px)}
+.btn.sec{background:#fff;color:var(--navy);box-shadow:0 4px 14px rgba(60,60,140,.14);padding:12px 20px}.btn.no{background:#b3261e;box-shadow:none}
+.msg{margin-top:12px;font-weight:600}.err{color:#b3261e}.ok{color:#1b7a3d}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px}.loc{padding:0;overflow:hidden;transition:.2s}.loc:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(60,60,140,.18)}
+.im{position:relative}.cb{position:absolute;left:12px;top:12px;background:#fff;border-radius:99px;padding:3px 12px;font-size:.78rem;font-weight:700;color:var(--violeta);box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.loc .ph{height:170px;background:linear-gradient(135deg,#dbe4f7,#e6dcf5);display:flex;align-items:center;justify-content:center;color:#8a8fb0;font-size:.85rem}
+.loc img{width:100%;height:170px;object-fit:cover;display:block}.loc .b{padding:18px 20px}.loc h3{margin:0 0 4px}.loc ul{padding-left:18px;margin:6px 0}
+.pre{white-space:pre-wrap}.tag{font-size:.8rem;color:var(--violeta);font-weight:700;margin-top:10px}.badge{display:inline-block;background:linear-gradient(135deg,#ff9f43,#ffb84d);color:#3a2300;border-radius:99px;padding:4px 13px;font-weight:800;font-size:.85rem;margin:6px 0}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 8px}.chip{border:0;background:#fff;border-radius:99px;padding:9px 16px;font:inherit;font-weight:600;font-size:.9rem;cursor:pointer;box-shadow:0 3px 10px rgba(60,60,140,.1)}.chip.on{background:var(--g);color:#fff}
+.vacio{border:2px dashed #c9cfe8;border-radius:20px;padding:24px;text-align:center;color:#8a8fb0;background:rgba(255,255,255,.6)}
+.mrow{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:end;margin-bottom:8px}@media(max-width:600px){.mrow{grid-template-columns:1fr 1fr}}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}.tabs button{border:0;background:#fff;border-radius:99px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer;box-shadow:0 3px 10px rgba(60,60,140,.1)}.tabs button.on{background:var(--g);color:#fff}
+.prev{max-width:240px;max-height:160px;border-radius:12px;margin-top:8px;display:block}.tw{overflow-x:auto}table{border-collapse:collapse;font-size:.82rem;width:100%;background:#fff;border-radius:12px}td,th{border-bottom:1px solid var(--ln);padding:8px 10px;text-align:left;vertical-align:top}
+.news{display:grid;grid-template-columns:230px 1fr}.news img,.news .ph{width:100%;height:100%;min-height:150px;object-fit:cover}@media(max-width:600px){.news{grid-template-columns:1fr}}
+footer{background:var(--navy);color:#fff;text-align:center;padding:30px 20px 36px}footer .sm{color:#aab4d6}
+</style></head><body>
+<div id="aviso" hidden></div>
+<div class="top"><div class="tb"><div class="brand"><img src="images/icono-at.png" alt=""><span>ALTERNATIVA<br>TECNOLÓGICA</span></div>
+<nav><button data-t="becas"><i>📚</i><span>Becas</span></button><button data-t="club"><i>🏪</i><span>Club AT</span></button><button data-t="noticias"><i>📰</i><span>Novedades</span></button><button data-t="contacto"><i>📞</i><span>Contacto</span></button><button data-t="panel"><i>🔐</i><span>Ingresar</span></button></nav></div></div>
+<section id="hero"><div class="hw"><div class="hl"><img src="images/logo-at.png" alt="Alternativa Tecnológica"></div>
+<div class="hr"><span class="pill">🎓 Centro de Estudiantes de Ingeniería</span><div class="slogan">Pensá <em>diferente</em></div>
+<p>Becas de fotocopias, descuentos en comercios y todas las novedades del centro, en un solo lugar.</p>
+<div class="row"><a class="btn" id="hForm" target="_blank" rel="noopener">📚 Inscribirme a las becas</a><button class="btn sec" id="hClub">🏪 Ver el Club AT</button></div></div></div></section>
+<main>
+<section id="becas" hidden><h1>📚 Becas de Fotocopias</h1><p class="lead">Participá del sorteo mensual para estudiantes de Ingeniería.</p>
+<div class="steps"><div class="st"><b>1</b><h3>Completá el formulario</h3><p>Apellido, nombre, DNI, legajo (5 números), carrera, mail y celular.</p></div><div class="st"><b>2</b><h3>Esperá el sorteo</h3><p>Se hace una vez por mes entre todos los inscriptos.</p></div><div class="st"><b>3</b><h3>¡Retirá tu beca!</h3><p>Si salís sorteado/a, te avisamos por mail o WhatsApp.</p></div></div>
+<div class="card cr"><b>Pueden participar estudiantes de:</b><br><span>⚙️ Ing. Mecánica</span><span>⚡ Ing. Eléctrica</span><span>🔌 Ing. Electrónica</span><span>🏗️ Ing. Civil</span><span>💻 Ing. en Sistemas</span>
+<p class="sm" style="margin-bottom:0">La inscripción se abre cada mes. Si ya ganaste antes, podés volver a anotarte.</p></div>
+<div class="cta" id="bBtn"></div></section>
+<section id="club" hidden><h1>🏪 Club Alternativa Tecnológica</h1><p class="lead">Descuentos y menús especiales para estudiantes en los locales adheridos.</p><input id="q" type="search" placeholder="🔎  Buscar local, categoría o plato…" aria-label="Buscar"><div class="chips" id="chips"></div><div id="cl"></div></section>
+<section id="noticias" hidden><h1>📰 Noticias y Novedades</h1><div id="ns"></div></section>
+<section id="contacto" hidden><h1>📞 Contacto</h1><div class="card"><p>Seguinos y escribinos por Instagram para consultas, ideas o para sumar tu comercio al Club.</p><a class="btn" target="_blank" rel="noopener" href="https://www.instagram.com/alternativatecnologica/">📸 @alternativatecnologica</a></div></section>
+<section id="panel" hidden></section>
+</main>
+<footer><b>Alternativa Tecnológica</b> · Pensá diferente<br><span class="sm">Centro de Estudiantes de Ingeniería</span></footer>
 <script>
-let locales=[];
-fetch('datos/locales.json').then(r=>r.json()).then(d=>{locales=d.locales||[];const cats=['Todos',...(d.categorias||[])];document.getElementById('categorias').innerHTML=cats.map(c=>`<button onclick="filtrar('${c}')">${c}</button>`).join('');mostrar(locales);});
-function mostrar(arr){document.getElementById('locales').innerHTML=arr.map(l=>`<div class='local'><h3>${l.nombre}</h3><p><b>${l.categoria}</b></p><p>${l.descripcion||''}</p><br><p><b>Descuento:</b> ${l.descuento||''}</p><p><b>Horario:</b> ${l.horario||'No informado'}</p></div>`).join('');}
-function filtrar(c){if(c==='Todos')return mostrar(locales);mostrar(locales.filter(x=>x.categoria===c));}
-document.getElementById('buscar').addEventListener('input',e=>{const t=e.target.value.toLowerCase();mostrar(locales.filter(x=>(x.nombre||'').toLowerCase().includes(t)||(x.categoria||'').toLowerCase().includes(t)));});
-fetch('datos/noticias.json').then(r=>r.json()).then(d=>{document.getElementById('listaNoticias').innerHTML=(d.noticias||[]).map(n=>`<div class='noticia'><h3>${n.titulo}</h3><small>${n.fecha}</small><p style='margin-top:10px'>${n.contenido}</p></div>`).join('');}).catch(()=>{});
-</script>
-</body></html><!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alternativa Tecnológica</title>
-</head>
+const CFG={API:'https://TU-SERVICIO.TU-USUARIO.workers.dev',FORM_URL:'https://docs.google.com/forms/d/e/1FAIpQLSer6WElUswfUrwqGwbfK18cIu56qMEoMK_ME8AEYEz2NlQaHw/viewform',SHEET_URL:''};
+const $=s=>document.querySelector(s),esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money=n=>'$'+Number(n).toLocaleString('es-AR'),hoy=new Date().toISOString().slice(0,10),fdate=d=>String(d||'').slice(0,10).split('-').reverse().join('/');
+const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+let TK=sessionStorage.getItem('tk')||'',ME=null,LOC=[],CATS=[],NOT=[],cat='';
+async function api(p,b){const r=await fetch(CFG.API+p,{method:b?'POST':'GET',headers:{'content-type':'application/json',authorization:'Bearer '+TK},body:b?JSON.stringify(b):undefined});
+ const j=await r.json().catch(()=>({error:'No hay conexión con el servicio.'}));if(!r.ok){if(r.status==401){TK='';sessionStorage.removeItem('tk')}throw new Error(j.error||'Error')}return j}
+function show(id,sc){if(!['becas','club','noticias','contacto','panel'].includes(id))id='becas';document.querySelectorAll('main>section').forEach(s=>s.hidden=s.id!=id);
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==id));if(sc&&location.hash!='#'+id)history.replaceState(null,'','#'+id);if(id=='panel')panel();if(sc)scrollTo({top:$('main').offsetTop-70,behavior:'smooth'})}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.t,1));
+const ICO={'Gastronomía':'🍔','Librería':'📖','Tecnología':'💻','Salud y gimnasio':'💪','Otro':'✨'},ico=c=>ICO[c]||'🏷️';
+const img=(u,a)=>u?'<img src="'+esc(u)+'" alt="'+esc(a)+'" loading="lazy">':'<div class="ph">Imagen próximamente</div>';
 
-<body style="font-family:Arial;text-align:center;padding:50px;background:#f4f6fb;">
+/* ---------- Público ---------- */
+$('#bBtn').innerHTML=CFG.FORM_URL?'<a class="btn" href="'+esc(CFG.FORM_URL)+'" target="_blank" rel="noopener">📚 Inscribirme ahora</a>':'<span class="sm">El formulario se habilita próximamente.</span>';
+if(CFG.FORM_URL)$('#hForm').href=CFG.FORM_URL;else $('#hForm').hidden=true;$('#hClub').onclick=()=>show('club',1);
+function card(l){const vig=!l.vigenteHasta||l.vigenteHasta>=hoy;
+ const it=(l.menu||[]).map(x=>{const f=Math.round(x.d?x.p*(1-x.d/100):x.p);return '<li'+(x.a?'':' style="opacity:.55;text-decoration:line-through"')+'>'+esc(x.n)+(x.p?' — '+(x.d?'<s>'+money(x.p)+'</s> <b>'+money(f)+'</b> <span class="tag">-'+x.d+'%</span>':'<b>'+money(x.p)+'</b>'):'')+(x.a?'':' <em>(agotado)</em>')+'</li>'}).join('');
+ return '<article class="card loc"><div class="im">'+img(l.imagen,l.nombre)+'<span class="cb">'+ico(l.categoria)+' '+esc(l.categoria)+'</span></div><div class="b"><h3>'+esc(l.nombre)+'</h3>'+(l.descuento&&vig?'<div class="badge">'+esc(l.descuento)+'</div>':'')+'<div>'+esc(l.descripcion)+'</div>'+(l.descuento&&vig&&l.condiciones?'<div class="sm">'+esc(l.condiciones)+'</div>':'')+(l.descuento&&vig&&l.vigenteHasta?'<div class="sm">Válido hasta '+fdate(l.vigenteHasta)+'</div>':'')+(it?'<div class="tag">Menú</div><ul>'+it+'</ul>':'')+(l.novedades?'<div class="tag">Novedades</div><div class="pre">'+esc(l.novedades)+'</div>':'')+'<div class="sm" style="margin-top:8px">'+[l.horario,l.direccion,l.telefono].filter(Boolean).map(esc).join(' · ')+'</div></div></article>'}
+function renderClub(){const q=norm($('#q').value);
+ $('#chips').innerHTML=['Todas',...CATS].map(c=>'<button class="chip'+((c=='Todas'?'':c)==cat?' on':'')+'" data-c="'+esc(c=='Todas'?'':c)+'">'+(c=='Todas'?'✨ ':ico(c)+' ')+esc(c)+'</button>').join('');
+ $('#chips').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{cat=b.dataset.c;renderClub()});
+ const hay=l=>norm([l.nombre,l.categoria,l.descripcion,l.descuento,(l.menu||[]).map(x=>x.n).join(' ')].join(' ')).includes(q);
+ let h='',total=0;(cat?[cat]:CATS).forEach(c=>{const ls=LOC.filter(l=>l.categoria==c&&hay(l));total+=ls.length;
+  if(ls.length)h+='<h2>'+ico(c)+' '+esc(c)+'</h2><div class="cards">'+ls.map(card).join('')+'</div>';else if(!q)h+='<h2>'+ico(c)+' '+esc(c)+'</h2><div class="vacio">Próximamente: locales de esta categoría.</div>'});
+ $('#cl').innerHTML=h+(q&&!total?'<p>No encontramos resultados para “'+esc($('#q').value)+'”.</p>':'')}
+$('#q').oninput=renderClub;
+function renderNot(){const ni=NOT.find(n=>n.importante);$('#aviso').hidden=!ni;if(ni)$('#aviso').innerHTML='📢 '+esc(ni.titulo)+' — <a data-go="noticias">ver más</a>';
+ const a=$('#aviso a');if(a)a.onclick=()=>show('noticias',1);
+ $('#ns').innerHTML=NOT.length?NOT.map(n=>'<article class="card loc news" style="margin-bottom:14px;padding:0">'+img(n.imagen,n.titulo)+'<div class="b"><div class="sm">'+fdate(n.fecha)+(n.importante?' · ⭐ Importante':'')+'</div><h3>'+esc(n.titulo)+'</h3><div class="pre">'+esc(n.contenido||n.texto)+'</div></div></article>').join(''):'<div class="vacio">Todavía no hay noticias. ¡Pronto vas a encontrar novedades del centro de estudiantes!</div>'}
+const get=u=>fetch(u+'?'+Date.now()).then(r=>r.ok?r.json():null).catch(()=>null);
+Promise.all([get('datos/locales.json'),get('datos/noticias.json')]).then(([d,n])=>{LOC=((d&&d.locales)||[]).filter(l=>l.activo!==false);CATS=[...new Set([...((d&&d.categorias)||[]),...LOC.map(l=>l.categoria).filter(Boolean)])];NOT=((n&&n.noticias)||[]).filter(x=>x.activo!==false);renderClub();renderNot()});
 
-<img src="images/logo-at.jpeg" width="200">
+/* ---------- Utilidades de edición ---------- */
+function img2data(f){return new Promise(ok=>{const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,900/i.width),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.82))};i.src=r.result};r.readAsDataURL(f)})}
+const fld=(lb,n,v,x)=>'<label>'+lb+'<input name="'+n+'" value="'+esc(v)+'" '+(x||'')+'></label>';
+const imgField=(id,cur)=>'<label>Imagen (tocá para subir una foto)<input type="file" accept="image/*" id="'+id+'"></label><img class="prev" id="'+id+'p" '+(cur?'src="'+esc(cur)+'"':'hidden')+' alt="Vista previa">';
+function prevHook(id){$('#'+id).onchange=async e=>{const f=e.target.files[0];if(f){const p=$('#'+id+'p');p.src=await img2data(f);p.hidden=false}}}
+const mrow=x=>{x=x||{n:'',p:'',d:'',a:true};return '<div class="mrow"><label>Plato / menú<input class="n" maxlength="60" value="'+esc(x.n)+'"></label><label>Precio $<input class="p" inputmode="decimal" value="'+esc(x.p||'')+'"></label><label>Descuento %<input class="d" inputmode="numeric" value="'+esc(x.d||'')+'"></label><label><input type="checkbox" class="a" style="width:auto"'+(x.a?' checked':'')+'> Disponible</label></div>'};
+const mtxt=m=>(m||[]).map(x=>x.n+(x.p?' $'+x.p:'')+(x.d?' -'+x.d+'%':'')+(x.a?'':' (NO disponible)')).join('; ');
+const msgE=(m,e)=>{m.className='msg err';m.textContent=e.message};
+const dif=(o,c)=>{const r=[];Object.keys(c).forEach(k=>{if(k=='imagenData'){if(c[k])r.push('Imagen: nueva');return}const a=k=='menu'?mtxt(o.menu):o[k],b=k=='menu'?mtxt(c.menu):c[k];if(String(a||'')!=String(b||''))r.push(k+': "'+(a||'')+'" → "'+(b||'')+'"')});return r};
 
-<h1>Alternativa Tecnológica</h1>
-
-<h2>Pensá diferente</h2>
-
-<p>
-Si ves esta pantalla, GitHub Pages está funcionando correctamente.
-</p>
-
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSer6WElUswfUrwqGwbfK18cIu56qMEoMK_ME8AEYEz2NlQaHw/viewform"
-target="_blank">
-Inscribirme en Becas
-</a>
-
-</body>
-</html>
+/* ---------- Panel ---------- */
+const loginForm=(e)=>'<h1>Ingresar</h1><p class="sub">Acceso para el administrador de AT y los encargados de cada local.</p><form class="card" id="lg" style="max-width:420px"><label>Mail<input name="email" type="email" required autocomplete="username"></label><br><label>Contraseña<input name="password" type="password" required autocomplete="current-password"></label><p><button class="btn">Ingresar</button></p><div class="msg err" id="lgm">'+esc(e||'')+'</div></form>';
+async function panel(){const p=$('#panel');
+ const lg=e=>{p.innerHTML=loginForm(e);$('#lg').onsubmit=async ev=>{ev.preventDefault();$('#lgm').textContent='Ingresando…';try{const j=await api('/login',Object.fromEntries(new FormData(ev.target)));TK=j.token;sessionStorage.setItem('tk',TK);panel()}catch(er){$('#lgm').textContent=er.message}}};
+ if(!TK)return lg();
+ try{ME=await api('/me')}catch(e){return lg(e.message)}
+ const adm=ME.role=='admin';p.innerHTML='<div class="row"><h1 style="flex:1">'+(adm?'Administrador AT':'Mi local')+'</h1><span class="sm">'+esc(ME.email)+'</span><button class="btn sec" id="out">Salir</button></div><div id="pc"></div>';
+ $('#out').onclick=()=>{TK='';sessionStorage.removeItem('tk');panel()};
+ if(adm)adminUI();else miLocal()}
+async function miLocal(){const box=$('#pc'),[d,pe]=await Promise.all([api('/datos'),api('/pending')]),l=d.locales.find(x=>x.id==ME.local);
+ if(!l){box.innerHTML='<p class="msg err">Tu usuario no tiene un local asignado. Avisale al administrador.</p>';return}
+ let st=pe.pendientes.length?'<p class="msg">⏳ Tenés cambios enviados esperando aprobación.</p>':'';
+ if(pe.ultimo)st+='<p class="sm">Último resultado: '+(pe.ultimo.ok?'✅ aprobado':'❌ rechazado'+(pe.ultimo.motivo?' ('+esc(pe.ultimo.motivo)+')':''))+' · '+fdate(pe.ultimo.fecha)+'</p>';
+ box.innerHTML='<p class="sub">Tus cambios se publican cuando el administrador los aprueba.</p>'+st+'<div id="ed"></div>';editor(l,false,$('#ed'))}
+function editor(l,adm,box,done){l=l||{id:'',nombre:'',categoria:'',descripcion:'',menu:[],novedades:'',descuento:'',condiciones:'',vigenteHasta:'',horario:'',direccion:'',telefono:'',imagen:'',activo:true};l.menu=l.menu||[];
+ box.innerHTML='<form class="card" id="lf"><h2 style="margin-top:0">'+esc(l.nombre||'Nuevo local')+'</h2>'+(adm?'<div class="g">'+fld('Nombre del local','nombre',l.nombre,'required')+'<label>Categoría<select name="categoria">'+['',...CATS].map(c=>'<option'+(c==l.categoria?' selected':'')+'>'+esc(c)+'</option>').join('')+'</select></label></div>':'')
+ +imgField('im',l.imagen)+'<label>Descripción<input name="descripcion" value="'+esc(l.descripcion)+'" maxlength="300"></label><div class="g">'+fld('Dirección','direccion',l.direccion)+fld('Teléfono / WhatsApp','telefono',l.telefono)+fld('Horario','horario',l.horario)+fld('Promoción o descuento (ej: 20% en la cuota)','descuento',l.descuento)+fld('Condiciones (ej: con credencial)','condiciones',l.condiciones)+'<label>Promoción válida hasta<input type="date" name="vigenteHasta" value="'+esc(l.vigenteHasta)+'"></label></div>'
+ +'<h2>Menú y precios (hasta 6)</h2><div id="mr">'+(l.menu.length?l.menu:[null]).map(mrow).join('')+'</div><p><button type="button" class="btn sec" id="am">Agregar plato</button></p><label>Novedades<textarea name="novedades" maxlength="800">'+esc(l.novedades)+'</textarea></label>'
+ +(adm?'<p><label><input type="checkbox" name="activo" style="width:auto"'+(l.activo!==false?' checked':'')+'> Visible en la página</label></p>':'')+'<p><button class="btn">'+(adm?'Publicar':'Enviar para aprobación')+'</button></p><div class="msg" id="lm"></div></form>';
+ prevHook('im');$('#am').onclick=()=>{if(document.querySelectorAll('.mrow').length<6)$('#mr').insertAdjacentHTML('beforeend',mrow())};
+ $('#lf').onsubmit=async ev=>{ev.preventDefault();const m=$('#lm');m.className='msg';m.textContent='Enviando…';
+  try{const f=new FormData(ev.target),c={};for(const[k,v]of f.entries())c[k]=v;if(adm)c.activo=f.has('activo');
+   c.menu=[...document.querySelectorAll('.mrow')].map(r=>({n:r.querySelector('.n').value,p:r.querySelector('.p').value,d:r.querySelector('.d').value,a:r.querySelector('.a').checked}));
+   const fi=$('#im').files[0];if(fi)c.imagenData=await img2data(fi);await api('/propose',{localId:l.id,cambios:c});
+   m.className='msg ok';m.textContent=adm?'Publicado. La página se actualiza en 1 o 2 minutos.':'Enviado. Queda pendiente de aprobación.';if(done)done();else if(!adm)setTimeout(miLocal,800)}catch(e){msgE(m,e)}}}
+function adminUI(){const T=[['pend','Pendientes'],['locs','Locales'],['nots','Noticias'],['users','Usuarios'],['bec','Becas'],['aud','Auditoría']];
+ $('#pc').innerHTML='<div class="tabs">'+T.map(t=>'<button data-s="'+t[0]+'">'+t[1]+'</button>').join('')+'</div><div id="sc"></div>';
+ const go=s=>{document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.s==s));({pend,locs,nots,users,bec,aud})[s]()};
+ document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.s));go('pend')}
+async function pend(){const sc=$('#sc'),[d,pe]=await Promise.all([api('/datos'),api('/pending')]);
+ sc.innerHTML=pe.pendientes.length?pe.pendientes.map((p,i)=>{const l=d.locales.find(x=>x.id==p.localId)||{},ds=dif(l,p.cambios);return '<div class="card" style="margin-bottom:12px"><b>'+esc(l.nombre||p.localId)+'</b> <span class="sm">· '+esc(p.email)+' · '+new Date(p.fecha).toLocaleString('es-AR')+'</span><div class="pre" style="margin:8px 0">'+(ds.length?ds.map(esc).join('\n'):'Sin diferencias')+'</div>'+(p.cambios.imagenData?'<img class="prev" src="'+p.cambios.imagenData+'" alt="Imagen propuesta">':'')+'<p class="row"><button class="btn" data-a="1" data-i="'+i+'">Aceptar y publicar</button><button class="btn no" data-a="0" data-i="'+i+'">Rechazar</button></p></div>'}).join(''):'<div class="vacio">No hay cambios pendientes.</div>';
+ sc.querySelectorAll('[data-i]').forEach(b=>b.onclick=async()=>{const a=b.dataset.a=='1',motivo=a?'':(prompt('Motivo del rechazo (opcional):')||'');b.disabled=true;try{await api('/decide',{pid:pe.pendientes[b.dataset.i].pid,aceptar:a,motivo});pend()}catch(e){alert(e.message);b.disabled=false}})}
+async function locs(){const sc=$('#sc'),d=await api('/datos');CATS=d.categorias||CATS;
+ sc.innerHTML='<p><button class="btn" id="nl">Nuevo local</button></p>'+d.locales.map((l,i)=>'<div class="card row" style="margin-bottom:8px"><b style="flex:1">'+esc(l.nombre)+' <span class="sm">'+esc(l.categoria)+(l.activo===false?' · oculto':'')+'</span></b><button class="btn sec" data-i="'+i+'">Editar</button></div>').join('')+'<div id="ed"></div>';
+ sc.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{editor(d.locales[b.dataset.i],true,$('#ed'),locs);$('#ed').scrollIntoView({behavior:'smooth'})});$('#nl').onclick=()=>{editor(null,true,$('#ed'),locs);$('#ed').scrollIntoView({behavior:'smooth'})}}
+async function nots(){const sc=$('#sc'),d=await api('/datos-noticias');
+ sc.innerHTML='<p><button class="btn" id="nn">Nueva noticia</button></p>'+d.noticias.map((n,i)=>'<div class="card row" style="margin-bottom:8px"><span class="sm">'+fdate(n.fecha)+'</span><b style="flex:1">'+(n.importante?'⭐ ':'')+esc(n.titulo)+(n.activo===false?' (oculta)':'')+'</b><button class="btn sec" data-i="'+i+'">Editar</button></div>').join('')+'<div id="en"></div>';
+ const ed=n=>{n=n||{id:'',titulo:'',texto:'',imagen:'',importante:false,activo:true};
+  $('#en').innerHTML='<form class="card" id="nf"><h2 style="margin-top:0">'+(n.id?'Editar noticia':'Nueva noticia')+'</h2>'+fld('Título','titulo',n.titulo,'required maxlength="120"')+'<label>Novedad / texto<textarea name="contenido" maxlength="2000">'+esc(n.contenido||n.texto)+'</textarea></label>'+imgField('ni',n.imagen)+'<p><label><input type="checkbox" name="importante" style="width:auto"'+(n.importante?' checked':'')+'> Novedad importante (se muestra como aviso en toda la página)</label><label><input type="checkbox" name="activo" style="width:auto"'+(n.activo!==false?' checked':'')+'> Visible</label></p><p class="row"><button class="btn">Publicar</button>'+(n.id?'<button type="button" class="btn no" id="del">Eliminar</button>':'')+'</p><div class="msg" id="nm"></div></form>';
+  prevHook('ni');$('#nf').scrollIntoView({behavior:'smooth'});
+  const send=async c=>{const m=$('#nm');m.className='msg';m.textContent='Publicando…';try{await api('/noticia',c);m.className='msg ok';m.textContent='Listo. Se verá en la página en 1 o 2 minutos.';setTimeout(nots,900)}catch(e){msgE(m,e)}};
+  $('#nf').onsubmit=async ev=>{ev.preventDefault();const f=new FormData(ev.target),c={id:n.id,titulo:f.get('titulo'),contenido:f.get('contenido'),importante:f.has('importante'),activo:f.has('activo')};const fi=$('#ni').files[0];if(fi)c.imagenData=await img2data(fi);send(c)};
+  if(n.id)$('#del').onclick=()=>{if(confirm('¿Eliminar esta noticia?'))send({id:n.id,eliminar:true})}};
+ sc.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>ed(d.noticias[b.dataset.i]));$('#nn').onclick=()=>ed()}
+async function users(){const sc=$('#sc'),[u,d]=await Promise.all([api('/users'),api('/datos')]);
+ sc.innerHTML='<form class="card" id="uf"><h2 style="margin-top:0">Crear o actualizar usuario de un local</h2><div class="g"><label>Mail del encargado<input name="email" type="email" required></label><label>Contraseña (mín. 8; vacío = no cambia)<input name="password" type="text" autocomplete="off"></label><label>Local<select name="local" required><option value="">Elegí un local</option>'+d.locales.map(l=>'<option value="'+esc(l.id)+'">'+esc(l.nombre)+'</option>').join('')+'</select></label><label><input type="checkbox" name="activo" checked style="width:auto"> Usuario activo</label></div><p><button class="btn">Guardar usuario</button></p><div class="msg" id="um"></div></form><div class="tw" style="margin-top:14px"><table><tr><th>Mail</th><th>Local</th><th>Estado</th></tr>'+u.usuarios.map(x=>'<tr><td>'+esc(x.email)+'</td><td>'+esc((d.locales.find(l=>l.id==x.local)||{}).nombre||x.local)+'</td><td>'+(x.activo===false?'Inactivo':'Activo')+'</td></tr>').join('')+'</table></div>';
+ $('#uf').onsubmit=async ev=>{ev.preventDefault();const f=new FormData(ev.target),m=$('#um');m.className='msg';m.textContent='Guardando…';try{await api('/user',{email:f.get('email'),password:f.get('password'),local:f.get('local'),activo:f.has('activo')});m.className='msg ok';m.textContent='Guardado.';setTimeout(users,700)}catch(e){msgE(m,e)}}}
+function bec(){$('#sc').innerHTML='<div class="card"><h2 style="margin-top:0">Becas de fotocopias</h2><ol><li>Compartí el formulario con los estudiantes (se abre y cierra desde Google Forms, pestaña Respuestas).</li><li>Cuando cierre la inscripción, abrí la hoja de respuestas y usá el menú <b>Sorteo AT → 2) Hacer sorteo</b>. Elegís la cantidad de ganadores (por ejemplo 50) y se hace la animación.</li><li>Los ganadores quedan guardados solo en esa hoja privada. Al mes siguiente usá <b>Sorteo AT → 3) Nuevo mes</b>.</li></ol><p class="row">'+(CFG.FORM_URL?'<a class="btn sec" target="_blank" rel="noopener" href="'+esc(CFG.FORM_URL)+'">Abrir formulario</a>':'')+(CFG.SHEET_URL?'<a class="btn" target="_blank" rel="noopener" href="'+esc(CFG.SHEET_URL)+'">Abrir hoja del sorteo</a>':'<span class="sm">Falta cargar SHEET_URL en index.html.</span>')+'</p></div>'}
+async function aud(){const a=await api('/audit');$('#sc').innerHTML='<div class="tw"><table><tr><th>Fecha y hora</th><th>Usuario</th><th>Acción</th><th>Referencia</th><th>Detalle</th></tr>'+a.items.map(r=>'<tr><td>'+new Date(r.f).toLocaleString('es-AR')+'</td><td>'+esc(r.u)+'</td><td>'+esc(r.a)+'</td><td>'+esc(r.r)+'</td><td class="pre">'+esc(r.d)+'</td></tr>').join('')+'</table></div>'}
+show(location.hash.slice(1)||'becas');addEventListener('load',()=>scrollTo({top:0,behavior:'instant'}));
+</script></body></html>
