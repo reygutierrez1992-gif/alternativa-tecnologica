@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://at-api.reygutierrez1992.workers.dev; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Alternativa Tecnológica</title><link rel="icon" href="images/icono-at.png">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -43,15 +45,15 @@ textarea{min-height:90px}input:focus,textarea:focus,select:focus,button:focus-vi
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}.tabs button{border:0;background:#fff;border-radius:99px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer;box-shadow:0 3px 10px rgba(60,60,140,.1)}.tabs button.on{background:var(--g);color:#fff}
 .prev{max-width:240px;max-height:160px;border-radius:12px;margin-top:8px;display:block}.tw{overflow-x:auto}table{border-collapse:collapse;font-size:.82rem;width:100%;background:#fff;border-radius:12px}td,th{border-bottom:1px solid var(--ln);padding:8px 10px;text-align:left;vertical-align:top}
 .news{display:grid;grid-template-columns:230px 1fr}.news img,.news .ph{width:100%;height:100%;min-height:150px;object-fit:cover}@media(max-width:600px){.news{grid-template-columns:1fr}}
-footer{background:var(--navy);color:#fff;text-align:center;padding:30px 20px 36px}footer .sm{color:#aab4d6}
+footer{background:var(--navy);color:#fff;text-align:center;padding:30px 20px 36px}footer .sm{color:#aab4d6}footer a{color:#fff;font-weight:700}.brand{text-decoration:none;cursor:pointer}.hl a{display:inline-block}[hidden]{display:none!important}.bar{flex:1;min-width:4px;background:var(--g);border-radius:4px 4px 0 0}.kpi{font-size:1.7rem;font-weight:800;color:var(--navy)}
 </style></head><body>
 <div id="aviso" hidden></div>
-<div class="top"><div class="tb"><div class="brand"><img src="images/icono-at.png" alt=""><span>ALTERNATIVA<br>TECNOLÓGICA</span></div>
-<nav><button data-t="becas"><i>📚</i><span>Becas</span></button><button data-t="club"><i>🏪</i><span>Club AT</span></button><button data-t="noticias"><i>📰</i><span>Novedades</span></button><button data-t="contacto"><i>📞</i><span>Contacto</span></button><button data-t="panel"><i>🔐</i><span>Ingresar</span></button></nav></div></div>
-<section id="hero"><div class="hw"><div class="hl"><img src="images/logo-at.png" alt="Alternativa Tecnológica"></div>
+<div class="top"><div class="tb"><a class="brand" id="home" href="./" aria-label="Ir al inicio"><img src="images/icono-at.png" alt=""><span>ALTERNATIVA<br>TECNOLÓGICA</span></a>
+<nav><button data-t="becas"><i>📚</i><span>Becas</span></button><button data-t="club"><i>🏪</i><span>Club AT</span></button><button data-t="noticias"><i>📰</i><span>Novedades</span></button><button data-t="contacto"><i>📞</i><span>Contacto</span></button><button data-t="panel" id="navPanel" hidden><i>🔐</i><span>Panel</span></button></nav></div></div>
+<section id="hero"><div class="hw"><div class="hl"><a href="./" id="home2" aria-label="Ir al inicio"><img src="images/logo-at.png" alt="Alternativa Tecnológica"></a></div>
 <div class="hr"><span class="pill">🎓 Centro de Estudiantes de Ingeniería</span><div class="slogan">Pensá <em>diferente</em></div>
 <p>Becas de fotocopias, descuentos en comercios y todas las novedades del centro, en un solo lugar.</p>
-<div class="row"><a class="btn" id="hForm" target="_blank" rel="noopener">📚 Inscribirme a las becas</a><button class="btn sec" id="hClub">🏪 Ver el Club AT</button></div></div></div></section>
+<div class="row"><a class="btn" id="hForm" target="_blank" rel="noopener" data-clic="inscribirme-hero">📚 Inscribirme a las becas</a><button class="btn sec" id="hClub">🏪 Ver el Club AT</button></div></div></div></section>
 <main>
 <section id="becas" hidden><h1>📚 Becas de Fotocopias</h1><p class="lead">Participá del sorteo mensual para estudiantes de Ingeniería.</p>
 <div class="steps"><div class="st"><b>1</b><h3>Completá el formulario</h3><p>Apellido, nombre, DNI, legajo (5 números), carrera, mail y celular.</p></div><div class="st"><b>2</b><h3>Esperá el sorteo</h3><p>Se hace una vez por mes entre todos los inscriptos.</p></div><div class="st"><b>3</b><h3>¡Retirá tu beca!</h3><p>Si salís sorteado/a, te avisamos por mail o WhatsApp.</p></div></div>
@@ -60,10 +62,10 @@ footer{background:var(--navy);color:#fff;text-align:center;padding:30px 20px 36p
 <div class="cta" id="bBtn"></div></section>
 <section id="club" hidden><h1>🏪 Club Alternativa Tecnológica</h1><p class="lead">Descuentos y menús especiales para estudiantes en los locales adheridos.</p><input id="q" type="search" placeholder="🔎  Buscar local, categoría o plato…" aria-label="Buscar"><div class="chips" id="chips"></div><div id="cl"></div></section>
 <section id="noticias" hidden><h1>📰 Noticias y Novedades</h1><div id="ns"></div></section>
-<section id="contacto" hidden><h1>📞 Contacto</h1><div class="card"><p>Seguinos y escribinos por Instagram para consultas, ideas o para sumar tu comercio al Club.</p><a class="btn" target="_blank" rel="noopener" href="https://www.instagram.com/alternativatecnologica/">📸 @alternativatecnologica</a></div></section>
+<section id="contacto" hidden><h1>📞 Contacto</h1><div class="card"><p>Seguinos y escribinos por Instagram para consultas, ideas o para sumar tu comercio al Club.</p><a class="btn" target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/alternativatecnologica/" data-clic="instagram">📸 @alternativatecnologica</a></div></section>
 <section id="panel" hidden></section>
 </main>
-<footer><b>Alternativa Tecnológica</b> · Pensá diferente<br><span class="sm">Centro de Estudiantes de Ingeniería</span></footer>
+<footer><b>Alternativa Tecnológica</b> · Pensá diferente<br><a href="https://www.instagram.com/alternativatecnologica/" target="_blank" rel="noopener noreferrer" data-clic="instagram">📸 @alternativatecnologica</a><br><span class="sm">Centro de Estudiantes de Ingeniería · Este sitio registra visitas con fines estadísticos.</span></footer>
 <script>
 const CFG = {
   API: 'https://at-api.reygutierrez1992.workers.dev',
@@ -79,14 +81,28 @@ async function api(p,b){let r;
  catch(e){let llega=true;try{await fetch(CFG.API+'/me',{mode:'no-cors'})}catch(_){llega=false}
   throw new Error(llega?'El servicio responde pero el navegador lo bloquea. En Cloudflare, SITE_ORIGIN debe ser exactamente https://reygutierrez1992-gif.github.io (sin barra final ni el nombre del repositorio). Corregilo y tocá Deploy.':'No se encuentra el servicio. Revisá que la dirección API de index.html sea la de tu Worker (termina en workers.dev) y que el Worker esté publicado.')}
  const j=await r.json().catch(()=>({error:'Respuesta inválida del servicio.'}));if(!r.ok){if(r.status==401){TK='';sessionStorage.removeItem('tk')}throw new Error(j.error||'Error')}return j}
-function show(id,sc){if(!['becas','club','noticias','contacto','panel'].includes(id))id='becas';document.querySelectorAll('main>section').forEach(s=>s.hidden=s.id!=id);
- document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==id));if(sc&&location.hash!='#'+id)history.replaceState(null,'','#'+id);if(id=='panel')panel();if(sc)scrollTo({top:$('main').offsetTop-70,behavior:'smooth'})}
+/* ---------- Visitas (solo para estadísticas; no se cuenta a quien ya ingresó como usuario) ---------- */
+const SID=sessionStorage.getItem('sid')||(()=>{const v=Math.random().toString(36).slice(2,12)+Date.now().toString(36);sessionStorage.setItem('sid',v);return v})();
+let secAct='',t0=Date.now();
+const trk=(tipo,seccion,seg)=>{if(TK||localStorage.getItem('noTrack'))return;try{navigator.sendBeacon(CFG.API+'/track',new Blob([JSON.stringify({tipo,sid:SID,seccion,seg,ref:document.referrer})],{type:'text/plain'}))}catch(e){}};
+function cerrarSec(){const s=Math.round((Date.now()-t0)/1000);if(secAct&&s>=1)trk('sec',secAct,s);t0=Date.now()}
+function navPanel(){$('#navPanel').hidden=!TK}
+function show(id,sc){if(!['becas','club','noticias','contacto','panel'].includes(id))id='becas';cerrarSec();secAct=id=='panel'?'':id;
+ document.querySelectorAll('main>section').forEach(s=>s.hidden=s.id!=id);
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==id));
+ if(sc){const h='#'+(id=='panel'?'acceso':id);if(location.hash!=h)history.replaceState(null,'',h)}
+ if(id=='panel')panel();if(sc)scrollTo({top:$('main').offsetTop-70,behavior:'smooth'})}
+const irInicio=()=>{history.replaceState(null,'',location.pathname);show('becas');scrollTo({top:0,behavior:'smooth'})};
+$('#home').onclick=$('#home2').onclick=e=>{e.preventDefault();irInicio()};
+document.addEventListener('click',e=>{const a=e.target.closest('[data-clic]');if(a)trk('clic',a.dataset.clic,0)});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)cerrarSec();else t0=Date.now()});addEventListener('pagehide',cerrarSec);
+addEventListener('hashchange',()=>{if(location.hash=='#acceso')show('panel')});
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.t,1));
 const ICO={'Gastronomía':'🍔','Librería':'📖','Tecnología':'💻','Salud y gimnasio':'💪','Otro':'✨'},ico=c=>ICO[c]||'🏷️';
 const img=(u,a)=>u?'<img src="'+esc(u)+'" alt="'+esc(a)+'" loading="lazy">':'<div class="ph">Imagen próximamente</div>';
 
 /* ---------- Público ---------- */
-$('#bBtn').innerHTML=CFG.FORM_URL?'<a class="btn" href="'+esc(CFG.FORM_URL)+'" target="_blank" rel="noopener">📚 Inscribirme ahora</a>':'<span class="sm">El formulario se habilita próximamente.</span>';
+$('#bBtn').innerHTML=CFG.FORM_URL?'<a class="btn" href="'+esc(CFG.FORM_URL)+'" target="_blank" rel="noopener" data-clic="inscribirme">📚 Inscribirme ahora</a>':'<span class="sm">El formulario se habilita próximamente.</span>';
 if(CFG.FORM_URL)$('#hForm').href=CFG.FORM_URL;else $('#hForm').hidden=true;$('#hClub').onclick=()=>show('club',1);
 function card(l){const vig=!l.vigenteHasta||l.vigenteHasta>=hoy;
  const it=(l.menu||[]).map(x=>{const f=Math.round(x.d?x.p*(1-x.d/100):x.p);return '<li'+(x.a?'':' style="opacity:.55;text-decoration:line-through"')+'>'+esc(x.n)+(x.p?' — '+(x.d?'<s>'+money(x.p)+'</s> <b>'+money(f)+'</b> <span class="tag">-'+x.d+'%</span>':'<b>'+money(x.p)+'</b>'):'')+(x.a?'':' <em>(agotado)</em>')+'</li>'}).join('');
@@ -115,41 +131,53 @@ const mtxt=m=>(m||[]).map(x=>x.n+(x.p?' $'+x.p:'')+(x.d?' -'+x.d+'%':'')+(x.a?''
 const msgE=(m,e)=>{m.className='msg err';m.textContent=e.message};
 const dif=(o,c)=>{const r=[];Object.keys(c).forEach(k=>{if(k=='imagenData'){if(c[k])r.push('Imagen: nueva');return}const a=k=='menu'?mtxt(o.menu):o[k],b=k=='menu'?mtxt(c.menu):c[k];if(String(a||'')!=String(b||''))r.push(k+': "'+(a||'')+'" → "'+(b||'')+'"')});return r};
 
-/* ---------- Panel ---------- */
-const loginForm=(e)=>'<h1>Ingresar</h1><p class="sub">Acceso para el administrador de AT y los encargados de cada local.</p><form class="card" id="lg" style="max-width:420px"><label>Mail<input name="email" type="email" required autocomplete="username"></label><br><label>Contraseña<input name="password" type="password" required autocomplete="current-password"></label><p><button class="btn">Ingresar</button></p><div class="msg err" id="lgm">'+esc(e||'')+'</div></form>';
+/* ---------- Panel (se entra solo con la dirección ...#acceso) ---------- */
+const PRE={club:{locales:'own',directo:false,aprobar:false,noticias:false,analitica:false,auditoria:false,becas:false},at:{locales:'all',directo:true,aprobar:true,noticias:true,analitica:true,auditoria:true,becas:true}};
+const PL=[['directo','Publicar sin necesitar aprobación'],['aprobar','Aprobar o rechazar cambios de otros locales'],['noticias','Gestionar noticias'],['analitica','Ver estadísticas de visitas'],['auditoria','Ver auditoría de cambios'],['becas','Ver la sección Becas']];
+const TIPO={admin:'Administrador AT',at:'Usuario AT',club:'Usuario Club',custom:'Usuario'};
+const loginForm=e=>'<h1>Ingresar</h1><p class="sub">Acceso solo para usuarios autorizados.</p><form class="card" id="lg" style="max-width:420px"><label>Mail<input name="email" type="email" required autocomplete="username"></label><br><label>Contraseña<input name="password" type="password" required autocomplete="current-password"></label><p><button class="btn">Ingresar</button></p><div class="msg err" id="lgm">'+esc(e||'')+'</div></form>';
 async function panel(){const p=$('#panel');
- const lg=e=>{p.innerHTML=loginForm(e);$('#lg').onsubmit=async ev=>{ev.preventDefault();$('#lgm').textContent='Ingresando…';try{const j=await api('/login',Object.fromEntries(new FormData(ev.target)));TK=j.token;sessionStorage.setItem('tk',TK);panel()}catch(er){$('#lgm').textContent=er.message}}};
+ const lg=e=>{navPanel();p.innerHTML=loginForm(e);$('#lg').onsubmit=async ev=>{ev.preventDefault();$('#lgm').textContent='Ingresando…';try{const j=await api('/login',Object.fromEntries(new FormData(ev.target)));TK=j.token;sessionStorage.setItem('tk',TK);localStorage.setItem('noTrack','1');panel()}catch(er){$('#lgm').textContent=er.message}}};
  if(!TK)return lg();
  try{ME=await api('/me')}catch(e){return lg(e.message)}
- const adm=ME.role=='admin';p.innerHTML='<div class="row"><h1 style="flex:1">'+(adm?'Administrador AT':'Mi local')+'</h1><span class="sm">'+esc(ME.email)+'</span><button class="btn sec" id="out">Salir</button></div><div id="pc"></div>';
- $('#out').onclick=()=>{TK='';sessionStorage.removeItem('tk');panel()};
- if(adm)adminUI();else miLocal()}
-async function miLocal(){const box=$('#pc'),[d,pe]=await Promise.all([api('/datos'),api('/pending')]),l=d.locales.find(x=>x.id==ME.local);
- if(!l){box.innerHTML='<p class="msg err">Tu usuario no tiene un local asignado. Avisale al administrador.</p>';return}
- let st=pe.pendientes.length?'<p class="msg">⏳ Tenés cambios enviados esperando aprobación.</p>':'';
- if(pe.ultimo)st+='<p class="sm">Último resultado: '+(pe.ultimo.ok?'✅ aprobado':'❌ rechazado'+(pe.ultimo.motivo?' ('+esc(pe.ultimo.motivo)+')':''))+' · '+fdate(pe.ultimo.fecha)+'</p>';
- box.innerHTML='<p class="sub">Tus cambios se publican cuando el administrador los aprueba.</p>'+st+'<div id="ed"></div>';editor(l,false,$('#ed'))}
+ navPanel();
+ p.innerHTML='<div class="row"><h1 style="flex:1">'+esc(TIPO[ME.tipo]||'Panel')+'</h1><span class="sm">'+esc(ME.email)+'</span><button class="btn sec" id="out">Salir</button></div><div id="pc"></div>';
+ $('#out').onclick=()=>{TK='';ME=null;sessionStorage.removeItem('tk');navPanel();irInicio()};
+ adminUI()}
 function editor(l,adm,box,done){l=l||{id:'',nombre:'',categoria:'',descripcion:'',menu:[],novedades:'',descuento:'',condiciones:'',vigenteHasta:'',horario:'',direccion:'',telefono:'',imagen:'',activo:true};l.menu=l.menu||[];
  box.innerHTML='<form class="card" id="lf"><h2 style="margin-top:0">'+esc(l.nombre||'Nuevo local')+'</h2>'+(adm?'<div class="g">'+fld('Nombre del local','nombre',l.nombre,'required')+'<label>Categoría<select name="categoria">'+['',...CATS].map(c=>'<option'+(c==l.categoria?' selected':'')+'>'+esc(c)+'</option>').join('')+'</select></label></div>':'')
  +imgField('im',l.imagen)+'<label>Descripción<input name="descripcion" value="'+esc(l.descripcion)+'" maxlength="300"></label><div class="g">'+fld('Dirección','direccion',l.direccion)+fld('Teléfono / WhatsApp','telefono',l.telefono)+fld('Horario','horario',l.horario)+fld('Promoción o descuento (ej: 20% en la cuota)','descuento',l.descuento)+fld('Condiciones (ej: con credencial)','condiciones',l.condiciones)+'<label>Promoción válida hasta<input type="date" name="vigenteHasta" value="'+esc(l.vigenteHasta)+'"></label></div>'
  +'<h2>Menú y precios (hasta 6)</h2><div id="mr">'+(l.menu.length?l.menu:[null]).map(mrow).join('')+'</div><p><button type="button" class="btn sec" id="am">Agregar plato</button></p><label>Novedades<textarea name="novedades" maxlength="800">'+esc(l.novedades)+'</textarea></label>'
- +(adm?'<p><label><input type="checkbox" name="activo" style="width:auto"'+(l.activo!==false?' checked':'')+'> Visible en la página</label></p>':'')+'<p><button class="btn">'+(adm?'Publicar':'Enviar para aprobación')+'</button></p><div class="msg" id="lm"></div></form>';
+ +(adm?'<p><label><input type="checkbox" name="activo" style="width:auto"'+(l.activo!==false?' checked':'')+'> Visible en la página</label></p>':'')+'<p><button class="btn">'+(ME.perms.directo?'Publicar':'Enviar para aprobación')+'</button></p><div class="msg" id="lm"></div></form>';
  prevHook('im');$('#am').onclick=()=>{if(document.querySelectorAll('.mrow').length<6)$('#mr').insertAdjacentHTML('beforeend',mrow())};
  $('#lf').onsubmit=async ev=>{ev.preventDefault();const m=$('#lm');m.className='msg';m.textContent='Enviando…';
   try{const f=new FormData(ev.target),c={};for(const[k,v]of f.entries())c[k]=v;if(adm)c.activo=f.has('activo');
    c.menu=[...document.querySelectorAll('.mrow')].map(r=>({n:r.querySelector('.n').value,p:r.querySelector('.p').value,d:r.querySelector('.d').value,a:r.querySelector('.a').checked}));
-   const fi=$('#im').files[0];if(fi)c.imagenData=await img2data(fi);await api('/propose',{localId:l.id,cambios:c});
-   m.className='msg ok';m.textContent=adm?'Publicado. La página se actualiza en 1 o 2 minutos.':'Enviado. Queda pendiente de aprobación.';if(done)done();else if(!adm)setTimeout(miLocal,800)}catch(e){msgE(m,e)}}}
-function adminUI(){const T=[['pend','Pendientes'],['locs','Locales'],['nots','Noticias'],['users','Usuarios'],['bec','Becas'],['aud','Auditoría']];
+   const fi=$('#im').files[0];if(fi)c.imagenData=await img2data(fi);const rr=await api('/propose',{localId:l.id,cambios:c});
+   m.className='msg ok';m.textContent=rr.aplicado?'Publicado. La página se actualiza en 1 o 2 minutos.':'Enviado. Queda pendiente de aprobación.';if(done)setTimeout(done,1400)}catch(e){msgE(m,e)}}}
+function adminUI(){const P=ME.perms,adm=ME.role=='admin';
+ const T=[P.aprobar&&['pend','Pendientes'],P.locales=='all'&&['locs','Locales'],P.locales=='own'&&['mio','Mi local'],P.noticias&&['nots','Noticias'],adm&&['users','Usuarios'],P.becas&&['bec','Becas'],P.analitica&&['est','📊 Estadísticas'],P.auditoria&&['aud','Auditoría']].filter(Boolean);
+ if(!T.length){$('#pc').innerHTML='<p class="msg err">Tu usuario todavía no tiene permisos asignados. Avisale al administrador.</p>';return}
  $('#pc').innerHTML='<div class="tabs">'+T.map(t=>'<button data-s="'+t[0]+'">'+t[1]+'</button>').join('')+'</div><div id="sc"></div>';
- const go=s=>{document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.s==s));({pend,locs,nots,users,bec,aud})[s]()};
- document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.s));go('pend')}
+ const F={pend,locs,mio,nots,users,bec,est,aud};
+ const go=s=>{document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.s==s));$('#sc').innerHTML='<p class="sm">Cargando…</p>';Promise.resolve().then(()=>F[s]()).catch(e=>{$('#sc').innerHTML='<p class="msg err">'+esc(e.message)+'</p>'})};
+ document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.s));go(T[0][0])}
+async function mio(){const box=$('#sc'),[d,pe]=await Promise.all([api('/datos'),api('/pending')]),l=d.locales.find(x=>x.id==ME.local);CATS=d.categorias||CATS;
+ if(!l){box.innerHTML='<p class="msg err">Tu usuario no tiene un local asignado. Avisale al administrador.</p>';return}
+ let st=pe.pendientes.length?'<p class="msg">⏳ Tenés cambios enviados esperando aprobación.</p>':'';
+ if(pe.ultimo)st+='<p class="sm">Último resultado: '+(pe.ultimo.ok?'✅ aprobado':'❌ rechazado'+(pe.ultimo.motivo?' ('+esc(pe.ultimo.motivo)+')':''))+' · '+fdate(pe.ultimo.fecha)+'</p>';
+ box.innerHTML=(ME.perms.directo?'':'<p class="sub">Tus cambios se publican cuando el administrador los aprueba.</p>')+st+'<div id="ed"></div>';editor(l,false,$('#ed'),mio)}
 async function pend(){const sc=$('#sc'),[d,pe]=await Promise.all([api('/datos'),api('/pending')]);
  sc.innerHTML=pe.pendientes.length?pe.pendientes.map((p,i)=>{const l=d.locales.find(x=>x.id==p.localId)||{},ds=dif(l,p.cambios);return '<div class="card" style="margin-bottom:12px"><b>'+esc(l.nombre||p.localId)+'</b> <span class="sm">· '+esc(p.email)+' · '+new Date(p.fecha).toLocaleString('es-AR')+'</span><div class="pre" style="margin:8px 0">'+(ds.length?ds.map(esc).join('\n'):'Sin diferencias')+'</div>'+(p.cambios.imagenData?'<img class="prev" src="'+p.cambios.imagenData+'" alt="Imagen propuesta">':'')+'<p class="row"><button class="btn" data-a="1" data-i="'+i+'">Aceptar y publicar</button><button class="btn no" data-a="0" data-i="'+i+'">Rechazar</button></p></div>'}).join(''):'<div class="vacio">No hay cambios pendientes.</div>';
  sc.querySelectorAll('[data-i]').forEach(b=>b.onclick=async()=>{const a=b.dataset.a=='1',motivo=a?'':(prompt('Motivo del rechazo (opcional):')||'');b.disabled=true;try{await api('/decide',{pid:pe.pendientes[b.dataset.i].pid,aceptar:a,motivo});pend()}catch(e){alert(e.message);b.disabled=false}})}
-async function locs(){const sc=$('#sc'),d=await api('/datos');CATS=d.categorias||CATS;
- sc.innerHTML='<p><button class="btn" id="nl">Nuevo local</button></p>'+d.locales.map((l,i)=>'<div class="card row" style="margin-bottom:8px"><b style="flex:1">'+esc(l.nombre)+' <span class="sm">'+esc(l.categoria)+(l.activo===false?' · oculto':'')+'</span></b><button class="btn sec" data-i="'+i+'">Editar</button></div>').join('')+'<div id="ed"></div>';
- sc.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{editor(d.locales[b.dataset.i],true,$('#ed'),locs);$('#ed').scrollIntoView({behavior:'smooth'})});$('#nl').onclick=()=>{editor(null,true,$('#ed'),locs);$('#ed').scrollIntoView({behavior:'smooth'})}}
+async function locs(){const sc=$('#sc'),full=ME.role=='admin'||ME.perms.directo;
+ sc.innerHTML=(full?'<p><button class="btn" id="nl">➕ Agregar local</button></p>':'')+'<div id="ll"><p class="sm">Cargando locales…</p></div><div id="ed"></div>';
+ const open=l=>{editor(l,full,$('#ed'),locs);$('#ed').scrollIntoView({behavior:'smooth'})};
+ if(full)$('#nl').onclick=()=>open(null);
+ try{const d=await api('/datos');CATS=d.categorias||CATS;
+  $('#ll').innerHTML=d.locales.length?d.locales.map((l,i)=>'<div class="card row" style="margin-bottom:8px"><b style="flex:1">'+esc(l.nombre)+' <span class="sm">'+esc(l.categoria)+(l.activo===false?' · oculto':'')+'</span></b><button class="btn sec" data-i="'+i+'">Editar</button></div>').join(''):'<div class="vacio">Todavía no hay locales. Tocá “Agregar local”.</div>';
+  $('#ll').querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>open(d.locales[b.dataset.i]))}
+ catch(e){$('#ll').innerHTML='<p class="msg err">No se pudieron cargar los locales: '+esc(e.message)+'</p>'}}
 async function nots(){const sc=$('#sc'),d=await api('/datos-noticias');
  sc.innerHTML='<p><button class="btn" id="nn">Nueva noticia</button></p>'+d.noticias.map((n,i)=>'<div class="card row" style="margin-bottom:8px"><span class="sm">'+fdate(n.fecha)+'</span><b style="flex:1">'+(n.importante?'⭐ ':'')+esc(n.titulo)+(n.activo===false?' (oculta)':'')+'</b><button class="btn sec" data-i="'+i+'">Editar</button></div>').join('')+'<div id="en"></div>';
  const ed=n=>{n=n||{id:'',titulo:'',texto:'',imagen:'',importante:false,activo:true};
@@ -160,9 +188,33 @@ async function nots(){const sc=$('#sc'),d=await api('/datos-noticias');
   if(n.id)$('#del').onclick=()=>{if(confirm('¿Eliminar esta noticia?'))send({id:n.id,eliminar:true})}};
  sc.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>ed(d.noticias[b.dataset.i]));$('#nn').onclick=()=>ed()}
 async function users(){const sc=$('#sc'),[u,d]=await Promise.all([api('/users'),api('/datos')]);
- sc.innerHTML='<form class="card" id="uf"><h2 style="margin-top:0">Crear o actualizar usuario de un local</h2><div class="g"><label>Mail del encargado<input name="email" type="email" required></label><label>Contraseña (mín. 8; vacío = no cambia)<input name="password" type="text" autocomplete="off"></label><label>Local<select name="local" required><option value="">Elegí un local</option>'+d.locales.map(l=>'<option value="'+esc(l.id)+'">'+esc(l.nombre)+'</option>').join('')+'</select></label><label><input type="checkbox" name="activo" checked style="width:auto"> Usuario activo</label></div><p><button class="btn">Guardar usuario</button></p><div class="msg" id="um"></div></form><div class="tw" style="margin-top:14px"><table><tr><th>Mail</th><th>Local</th><th>Estado</th></tr>'+u.usuarios.map(x=>'<tr><td>'+esc(x.email)+'</td><td>'+esc((d.locales.find(l=>l.id==x.local)||{}).nombre||x.local)+'</td><td>'+(x.activo===false?'Inactivo':'Activo')+'</td></tr>').join('')+'</table></div>';
- $('#uf').onsubmit=async ev=>{ev.preventDefault();const f=new FormData(ev.target),m=$('#um');m.className='msg';m.textContent='Guardando…';try{await api('/user',{email:f.get('email'),password:f.get('password'),local:f.get('local'),activo:f.has('activo')});m.className='msg ok';m.textContent='Guardado.';setTimeout(users,700)}catch(e){msgE(m,e)}}}
+ sc.innerHTML='<form class="card" id="uf"><h2 style="margin-top:0">Agregar o editar usuario</h2><div class="g"><label>Mail<input name="email" type="email" required></label><label>Contraseña (mín. 8; vacío = no cambia)<input name="password" type="text" autocomplete="off"></label><label>Tipo de usuario<select name="tipo"><option value="club">Usuario Club (solo su local)</option><option value="at">Usuario AT (todo menos gestionar usuarios)</option><option value="custom">Personalizado</option></select></label><label>Local asignado<select name="local"><option value="">—</option>'+d.locales.map(l=>'<option value="'+esc(l.id)+'">'+esc(l.nombre)+'</option>').join('')+'</select></label></div>'
+ +'<h2>Qué puede modificar</h2><label>Locales<select name="p_locales"><option value="none">Ninguno</option><option value="own">Solo su local (imágenes, menú, precios, descuentos, dirección…)</option><option value="all">Todos los locales y crear nuevos</option></select></label><p>'+PL.map(([k,t])=>'<label style="margin:6px 0"><input type="checkbox" name="p_'+k+'" style="width:auto"> '+t+'</label>').join('')+'<label style="margin:6px 0"><input type="checkbox" name="activo" checked style="width:auto"> Usuario activo</label></p><p class="sm">Agregar, editar y eliminar usuarios es siempre exclusivo del administrador.</p><p class="row"><button class="btn">Guardar usuario</button><button type="button" class="btn sec" id="ucl">Limpiar</button></p><div class="msg" id="um"></div></form>'
+ +'<h2>Usuarios cargados</h2><div class="tw"><table><tr><th>Mail</th><th>Tipo</th><th>Local</th><th>Estado</th><th></th></tr>'+(u.usuarios.length?u.usuarios.map((x,i)=>'<tr><td>'+esc(x.email)+'</td><td>'+esc(TIPO[x.tipo]||'Usuario')+'</td><td>'+esc((d.locales.find(l=>l.id==x.local)||{}).nombre||x.local||'—')+'</td><td>'+(x.activo===false?'Inactivo':'Activo')+'</td><td><button class="btn sec" data-e="'+i+'">Editar</button> <button class="btn no" data-x="'+i+'" style="padding:11px 16px">Eliminar</button></td></tr>').join(''):'<tr><td colspan="5">Todavía no hay usuarios.</td></tr>')+'</table></div>';
+ const F=$('#uf'),setP=p=>{F.p_locales.value=p.locales;PL.forEach(([k])=>F['p_'+k].checked=!!p[k])};setP(PRE.club);
+ F.tipo.onchange=()=>{if(PRE[F.tipo.value])setP(PRE[F.tipo.value])};
+ sc.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{const x=u.usuarios[b.dataset.e];F.email.value=x.email;F.password.value='';F.tipo.value=x.tipo||'club';F.local.value=x.local||'';F.activo.checked=x.activo!==false;setP(x.perms||PRE.club);F.scrollIntoView({behavior:'smooth'})});
+ sc.querySelectorAll('[data-x]').forEach(b=>b.onclick=async()=>{const x=u.usuarios[b.dataset.x];if(confirm('¿Eliminar al usuario '+x.email+'? No podrá volver a ingresar.')){try{await api('/user-del',{email:x.email});users()}catch(e){alert(e.message)}}});
+ $('#ucl').onclick=()=>{F.reset();setP(PRE.club)};
+ F.onsubmit=async ev=>{ev.preventDefault();const m=$('#um');m.className='msg';m.textContent='Guardando…';const p={locales:F.p_locales.value};PL.forEach(([k])=>p[k]=F['p_'+k].checked);
+  try{await api('/user',{email:F.email.value,password:F.password.value,tipo:F.tipo.value,local:F.local.value,activo:F.activo.checked,perms:p});m.className='msg ok';m.textContent='Guardado.';setTimeout(users,900)}catch(e){msgE(m,e)}}}
+const fm=s=>{s=Math.round(s||0);return s>=60?Math.floor(s/60)+' min '+s%60+' s':s+' s'};
+const SECN={inicio:'Inicio',becas:'Becas',club:'Club AT',noticias:'Novedades',contacto:'Contacto'},CLN={'inscribirme-hero':'Botón Inscribirme (portada)',inscribirme:'Botón Inscribirme (Becas)',instagram:'Instagram'};
+const tabla=(t,h,rows)=>'<h2>'+t+'</h2><div class="tw"><table><tr>'+h.map(x=>'<th>'+x+'</th>').join('')+'</tr>'+(rows.length?rows.map(r=>'<tr>'+r.map(c=>'<td>'+esc(c)+'</td>').join('')+'</tr>').join(''):'<tr><td colspan="'+h.length+'">Sin datos todavía.</td></tr>')+'</table></div>';
+async function est(){const sc=$('#sc'),s=await api('/stats');
+ const R=[['Hoy',s.resumen.hoy],['Últimos 7 días',s.resumen.semana],['Últimos 30 días',s.resumen.mes],['Último año',s.resumen.anio]],mx=Math.max(1,...s.serie.map(x=>x.v)),mh=Math.max(1,...s.horas.map(x=>x.n));
+ const top={};s.ipsec.forEach(r=>{if(!top[r.ip])top[r.ip]=r.seccion});const pico=s.horas.slice().sort((a,b)=>b.n-a.n)[0];
+ sc.innerHTML='<div class="steps">'+R.map(([t,r])=>'<div class="st"><h3>'+t+'</h3><div class="kpi">'+(r.v||0)+' <span class="sm">visitas</span></div><p>'+(r.u||0)+' IP distintas</p></div>').join('')+'</div>'
+ +'<h2>Visitas por día (últimos 30 días)</h2><div class="card"><div style="display:flex;align-items:flex-end;gap:3px;height:120px">'+s.serie.map(x=>'<div class="bar" title="'+fdate(x.dia)+': '+x.v+' visitas, '+x.u+' IP" style="height:'+Math.max(4,x.v/mx*100)+'%"></div>').join('')+'</div><p class="sm">Pasá el mouse o el dedo sobre cada barra para ver el detalle. IP que volvieron más de una vez en 30 días: <b>'+s.recurrentes+'</b>'+(pico?' · Hora de más visitas: <b>'+pico.hora+' hs</b>':'')+'</p></div>'
+ +tabla('Dónde pasan más tiempo (30 días)',['Sección','Vistas','Tiempo total','Promedio por vista'],s.secciones.map(r=>[SECN[r.seccion]||r.seccion,r.vistas,fm(r.total),fm(r.prom)]))
+ +tabla('Visitas por IP (30 días)',['IP','Lugar','Visitas','Tiempo total','Sección donde más estuvo','Última visita'],s.ips.map(r=>[r.ip,[r.ciudad,r.pais].filter(Boolean).join(', ')||'—',r.sesiones,fm(r.tiempo),SECN[top[r.ip]]||top[r.ip]||'—',new Date(r.ultima).toLocaleString('es-AR')]))
+ +tabla('Desde dónde ingresan',['País','Región','Ciudad','Visitas'],s.lugares.map(r=>[r.pais||'—',r.region||'—',r.ciudad||'—',r.sesiones]))
+ +tabla('Dispositivos',['Dispositivo','Visitas'],s.disp.map(r=>[r.disp,r.n]))+tabla('Cómo llegaron',['Origen','Visitas'],s.refs.map(r=>[r.ref,r.n]))
+ +tabla('Clics en botones importantes',['Botón','Clics'],s.clics.map(r=>[CLN[r.seccion]||r.seccion,r.n]))
+ +'<h2>Visitas por hora del día</h2><div class="card"><div style="display:flex;align-items:flex-end;gap:3px;height:90px">'+Array.from({length:24},(_,h)=>{const x=s.horas.find(y=>y.hora==h)||{n:0};return '<div class="bar" title="'+h+' hs: '+x.n+' visitas" style="height:'+Math.max(3,x.n/mh*100)+'%"></div>'}).join('')+'</div><p class="sm">De 0 a 23 hs (hora de Argentina).</p></div>'
+ +'<p class="sm">Las IP y ubicaciones son datos personales: usalas solo con fines estadísticos y no las compartas.</p>'}
 function bec(){$('#sc').innerHTML='<div class="card"><h2 style="margin-top:0">Becas de fotocopias</h2><ol><li>Compartí el formulario con los estudiantes (se abre y cierra desde Google Forms, pestaña Respuestas).</li><li>Cuando cierre la inscripción, abrí la hoja de respuestas y usá el menú <b>Sorteo AT → 2) Hacer sorteo</b>. Elegís la cantidad de ganadores (por ejemplo 50) y se hace la animación.</li><li>Los ganadores quedan guardados solo en esa hoja privada. Al mes siguiente usá <b>Sorteo AT → 3) Nuevo mes</b>.</li></ol><p class="row">'+(CFG.FORM_URL?'<a class="btn sec" target="_blank" rel="noopener" href="'+esc(CFG.FORM_URL)+'">Abrir formulario</a>':'')+(CFG.SHEET_URL?'<a class="btn" target="_blank" rel="noopener" href="'+esc(CFG.SHEET_URL)+'">Abrir hoja del sorteo</a>':'<span class="sm">Falta cargar SHEET_URL en index.html.</span>')+'</p></div>'}
 async function aud(){const a=await api('/audit');$('#sc').innerHTML='<div class="tw"><table><tr><th>Fecha y hora</th><th>Usuario</th><th>Acción</th><th>Referencia</th><th>Detalle</th></tr>'+a.items.map(r=>'<tr><td>'+new Date(r.f).toLocaleString('es-AR')+'</td><td>'+esc(r.u)+'</td><td>'+esc(r.a)+'</td><td>'+esc(r.r)+'</td><td class="pre">'+esc(r.d)+'</td></tr>').join('')+'</table></div>'}
-show(location.hash.slice(1)||'becas');addEventListener('load',()=>scrollTo({top:0,behavior:'instant'}));
+navPanel();const h0=location.hash.slice(1);show(h0=='acceso'?'panel':(h0||'becas'));if(!sessionStorage.getItem('ini')){sessionStorage.setItem('ini','1');trk('ini','inicio',0)}
+addEventListener('load',()=>scrollTo({top:0,behavior:'instant'}));
 </script></body></html>
