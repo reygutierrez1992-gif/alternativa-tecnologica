@@ -65,7 +65,7 @@ footer{background:var(--navy);color:#fff;text-align:center;padding:30px 20px 36p
 </main>
 <footer><b>Alternativa Tecnológica</b> · Pensá diferente<br><span class="sm">Centro de Estudiantes de Ingeniería</span></footer>
 <script>
-const CFG={API:'https://TU-SERVICIO.TU-USUARIO.workers.dev',FORM_URL:'https://docs.google.com/forms/d/e/1FAIpQLSer6WElUswfUrwqGwbfK18cIu56qMEoMK_ME8AEYEz2NlQaHw/viewform',SHEET_URL:''};
+const CFG={API:'https://at-api.reygutierrez1992.workers.dev',FORM_URL:'https://docs.google.com/forms/d/e/1FAIpQLSer6WElUswfUrwqGwbfK18cIu56qMEoMK_ME8AEYEz2NlQaHw/viewform',SHEET_URL:''};
 const $=s=>document.querySelector(s),esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const money=n=>'$'+Number(n).toLocaleString('es-AR'),hoy=new Date().toISOString().slice(0,10),fdate=d=>String(d||'').slice(0,10).split('-').reverse().join('/');
 const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
