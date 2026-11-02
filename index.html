@@ -103,7 +103,7 @@ function renderNot(){const ni=NOT.find(n=>n.importante);$('#aviso').hidden=!ni;i
  const a=$('#aviso a');if(a)a.onclick=()=>show('noticias',1);
  $('#ns').innerHTML=NOT.length?NOT.map(n=>'<article class="card loc news" style="margin-bottom:14px;padding:0">'+img(n.imagen,n.titulo)+'<div class="b"><div class="sm">'+fdate(n.fecha)+(n.importante?' · ⭐ Importante':'')+'</div><h3>'+esc(n.titulo)+'</h3><div class="pre">'+esc(n.contenido||n.texto)+'</div></div></article>').join(''):'<div class="vacio">Todavía no hay noticias. ¡Pronto vas a encontrar novedades del centro de estudiantes!</div>'}
 const get=u=>fetch(u+'?'+Date.now()).then(r=>r.ok?r.json():null).catch(()=>null);
-Promise.all([get('datos/locales.json'),get('datos/noticias.json')]).then(([d,n])=>{LOC=((d&&d.locales)||[]).filter(l=>l.activo!==false);CATS=[...new Set([...((d&&d.categorias)||[]),...LOC.map(l=>l.categoria).filter(Boolean)])];NOT=((n&&n.noticias)||[]).filter(x=>x.activo!==false);renderClub();renderNot()});
+Promise.all([get('data/locales.json'),get('data/noticias.json')]).then(([d,n])=>{LOC=((d&&d.locales)||[]).filter(l=>l.activo!==false);CATS=[...new Set([...((d&&d.categorias)||[]),...LOC.map(l=>l.categoria).filter(Boolean)])];NOT=((n&&n.noticias)||[]).filter(x=>x.activo!==false);renderClub();renderNot()});
 
 /* ---------- Utilidades de edición ---------- */
 function img2data(f){return new Promise(ok=>{const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,900/i.width),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.82))};i.src=r.result};r.readAsDataURL(f)})}
