@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-11-03T14:22:23.942Z",
+ "actualizado": "2026-11-03T14:24:09.305Z",
  "categorias": [
   "Gastronomía",
   "Librería",
@@ -13,7 +13,7 @@
    "nombre": "Palito",
    "categoria": "Gastronomía",
    "descripcion": "Bar y restaurante frente a la facultad.",
-   "imagen": "",
+   "imagen": "images/palito-1793715847677.jpg",
    "menu": [
     {
      "n": "Ñoquis con salsa",
