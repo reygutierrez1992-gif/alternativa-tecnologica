@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-11-03T14:27:25.095Z",
+ "actualizado": "2026-11-05T00:52:37.450Z",
  "categorias": [
   "Gastronomía",
   "Librería",
@@ -23,8 +23,8 @@
     },
     {
      "n": "Milanesa con papas",
-     "p": 5200,
-     "d": 30,
+     "p": 10000,
+     "d": 50,
      "a": true
     }
    ],
