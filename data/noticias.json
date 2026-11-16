@@ -1,15 +1,6 @@
 {
  "noticias": [
   {
-   "id": "nmw26tpk6",
-   "fecha": "2026-11-04",
-   "imagen": "images/nmw26tpk6-1793801041062.jpg",
-   "titulo": "Inscripciones abiertas",
-   "contenido": "Ya se encuentran abiertas las inscripciones para las becas de fotocopias.",
-   "importante": true,
-   "activo": true
-  },
-  {
    "titulo": "Inscripciones abiertas",
    "fecha": "2026-10-26",
    "contenido": "Ya se encuentran abiertas las inscripciones para las becas de fotocopias."
