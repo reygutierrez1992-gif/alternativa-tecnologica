@@ -116,6 +116,10 @@ dialog{border:0;border-radius:18px;padding:0;width:min(640px,92vw);color:var(--i
 #baja h3{font-size:1.05rem;margin:0 0 6px}#baja .card p{margin:0 0 14px}
 footer{background:var(--navy);color:#dfe5fb;padding:36px 0 calc(36px + 70px)}@media(min-width:760px){footer{padding-bottom:36px}}
 .fw{display:flex;flex-wrap:wrap;gap:14px 32px;justify-content:space-between;align-items:center}footer a{color:#fff;display:inline-flex;gap:8px;align-items:center;font-weight:600}footer .sm{color:#b3bde0}
+/* footer siempre abajo */
+body{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;padding-bottom:0}
+main{flex:1 0 auto}
+footer{margin-top:auto;flex-shrink:0}
 </style></head><body>
 <a class="skip" href="#main">Saltar al contenido</a>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
