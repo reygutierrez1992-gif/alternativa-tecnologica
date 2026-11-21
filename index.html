@@ -1,115 +1,556 @@
-/* mejoras.js — Alternativa Tecnológica
-   1) Préstamos (panel): borrar historial completo o parcial.
-   2) Ideas y consejos: los alumnos envían, el administrador decide qué se ve.
-   Se carga DESPUÉS del script principal de index.html. */
-(()=>{
-/* ================= IDEAS: parte pública ================= */
-let IDEAS=[];
-const TIPOS=['Idea','Consejo','Sugerencia','Otro'];
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://at-api.reygutierrez1992.workers.dev; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin"><meta name="theme-color" content="#1c2a52">
+<title>Alternativa Tecnológica</title><link rel="icon" href="images/icono-at.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#3f7ad8;--blue-d:#3466c4;--violet:#7b57d8;--navy:#1c2a52;--amber:#ffb84d;--ink:#1b2236;--mut:#576079;--line:#e2e6f1;--bg:#f6f7fc;--tint:#eef2fc;--g:linear-gradient(135deg,#3466c4,#6f4fcf);--ease:cubic-bezier(.23,1,.32,1);--rise:8px}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%;scrollbar-color:#b9c3e6 transparent}
+body{margin:0;font:400 1rem/1.6 Figtree,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);padding-bottom:84px;-webkit-font-smoothing:antialiased;caret-color:var(--violet)}
+@media(min-width:760px){body{padding-bottom:0}}
+::selection{background:#cdd9fb;color:var(--navy)}::placeholder{color:#6a7289}
+h1,h2,h3{font-family:Sora,Figtree,system-ui,sans-serif;color:var(--navy);text-wrap:balance;margin:0}
+a{color:var(--blue-d);text-underline-offset:3px}[hidden]{display:none!important}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;padding:8px 14px;border-radius:8px;z-index:60;font-weight:600}.skip:focus{left:12px}
+.ic{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.top{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line)}
+.tb{display:flex;align-items:center;gap:16px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--navy);font:800 .8rem/1.1 Sora,sans-serif;letter-spacing:.03em}.brand img{height:38px;width:auto;display:block}
+nav{margin-left:auto;display:flex;gap:4px;min-width:0;overflow-x:auto;scrollbar-width:none}nav::-webkit-scrollbar{display:none}
+nav button{display:flex;align-items:center;gap:8px;border:0;background:none;font:600 .92rem Figtree,sans-serif;color:var(--ink);padding:9px 14px;border-radius:10px;cursor:pointer;transition:background-color 160ms var(--ease),color 160ms var(--ease),transform 120ms var(--ease)}
+nav button:active{transform:scale(.97)}nav button.on{background:var(--g);color:#fff}
+@media(hover:hover) and (pointer:fine){nav button:not(.on):hover{background:var(--tint)}}
+@media(max-width:759px){
+ .tb{height:56px}
+ nav{position:fixed;left:0;right:0;bottom:0;margin:0;z-index:30;background:#fff;border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom));justify-content:flex-start;gap:0}
+ nav button{flex:1 0 74px;flex-direction:column;gap:2px;padding:2px;font-size:.68rem;color:var(--mut);background:none!important}
+ nav button{justify-content:flex-start}nav button span{text-align:center;line-height:1.15}nav button .ic{width:48px;height:30px;padding:5px 18px;border-radius:15px;transition:background-color 160ms var(--ease)}
+ nav button.on{color:var(--navy)}nav button.on .ic{background:var(--g);color:#fff}}
+#hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#eaf0fd,var(--bg))}
+#hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(63,122,216,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(63,122,216,.09) 1px,transparent 1px);background-size:36px 36px;-webkit-mask-image:linear-gradient(#000 50%,transparent);mask-image:linear-gradient(#000 50%,transparent)}
+.hw{position:relative;display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:48px;align-items:center;padding-top:60px;padding-bottom:60px}
+.slogan{font-size:clamp(2.3rem,5.2vw,3.9rem);line-height:1.04;letter-spacing:-.025em;font-weight:800;max-width:14ch}
+.hsub{margin:18px 0 28px;font-size:1.1rem;color:var(--mut);max-width:52ch}
+.hcopy>*{animation:rise 320ms var(--ease) both}.hcopy>:nth-child(2){animation-delay:60ms}.hcopy>:nth-child(3){animation-delay:120ms}
+.hlogo{display:flex;justify-content:center}.hlogo a{display:block;width:min(360px,100%);background:#fff;border:1px solid var(--line);border-radius:28px;padding:28px;box-shadow:0 22px 40px -22px rgba(40,60,140,.4)}.hlogo img{display:block;width:100%;height:auto}
+@media(max-width:759px){.hw{grid-template-columns:1fr;gap:24px;padding-top:28px;padding-bottom:36px}.hlogo{order:-1}.hlogo a{width:min(230px,70%);padding:16px;border-radius:22px}.slogan{max-width:none}}
+@media(min-width:760px) and (max-width:1010px){nav button{padding:9px 9px;font-size:.84rem}.brand span{display:none}}
+main{padding:44px 0 72px}
+main h1,.t{font-size:clamp(1.7rem,3.6vw,2.4rem);font-weight:800;letter-spacing:-.02em;line-height:1.15}
+h2{margin:1.6em 0 .6em;font-size:1.15rem;font-weight:700;color:var(--navy)}#cl h2{display:flex;align-items:center;gap:10px;font-size:1.3rem}#cl h2 .ic{color:var(--blue-d)}
+.lead{color:var(--mut);max-width:62ch;margin:10px 0 0}.sm{color:var(--mut);font-size:.85rem}.sub{color:var(--mut);margin:6px 0 20px;max-width:62ch}
+main>section:not([hidden]){animation:rise 240ms var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(var(--rise))}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){:root{--rise:0px}}
+.steps{list-style:none;margin:36px 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.steps li{padding-top:20px;border-top:2px solid var(--blue)}.steps li:nth-child(2){border-color:var(--violet)}.steps li:nth-child(3){border-color:var(--amber)}
+.steps .n{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--navy);color:#fff;font:700 .9rem Sora,sans-serif;margin-bottom:10px}
+.steps h3{font-size:1.05rem;margin-bottom:4px}.steps p{margin:0;color:var(--mut);font-size:.95rem;max-width:34ch}
+@media(max-width:759px){.steps{grid-template-columns:1fr;gap:22px}}
+.who{display:grid;grid-template-columns:1fr 1fr;gap:32px;padding:28px 0;border-top:1px solid var(--line)}.who h3{font-size:1rem}
+.who ul{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}.who li{display:flex;gap:10px;align-items:center}.who li .ic{color:var(--blue-d)}.who p{margin:12px 0 0;color:var(--mut)}
+@media(max-width:759px){.who{grid-template-columns:1fr;gap:20px}}
+.cta{margin-top:8px}
+.search{position:relative;max-width:520px;margin-top:22px}.search .ic{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--mut);pointer-events:none}
+#q{width:100%;margin:0;padding:13px 16px 13px 44px;border:1px solid #7f89a8;border-radius:12px;background:#fff;font:inherit}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 4px}
+.chip{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 14px;font:600 .9rem Figtree,sans-serif;color:var(--ink);cursor:pointer;transition:background-color 160ms var(--ease),color 160ms var(--ease),border-color 160ms var(--ease),transform 120ms var(--ease)}
+.chip:active{transform:scale(.97)}.chip.on{background:var(--g);color:#fff;border-color:transparent}
+@media(hover:hover) and (pointer:fine){.chip:not(.on):hover{border-color:#b7c5ee}}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.local{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow 200ms var(--ease),border-color 200ms var(--ease)}
+@media(hover:hover) and (pointer:fine){.local:hover{border-color:#c3d0f2;box-shadow:0 16px 30px -20px rgba(40,60,140,.45)}}
+.local .im{aspect-ratio:16/10;background:var(--tint)}.local .im img{width:100%;height:100%;object-fit:cover;display:block}
+.ph{display:grid;place-items:center;height:100%;min-height:120px;color:#4d587a;font-size:.85rem;background:linear-gradient(135deg,#e5ecfb,#ece6f9)}
+.local .b{padding:18px 20px 20px;display:flex;flex-direction:column;gap:12px;flex:1}.local h3{font-size:1.15rem}
+.cat{display:inline-flex;gap:6px;align-items:center;color:var(--mut);font-size:.82rem;font-weight:600;margin-top:2px}
+.offer{display:inline-flex;gap:6px;align-items:center;background:#fff3dc;color:#6b4300;font-weight:700;font-size:.88rem;padding:5px 12px;border-radius:8px;align-self:flex-start}
+.menu{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}.menu li{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;font-size:.95rem}
+.menu .out{color:#5f677d}.menu .out span:first-child{text-decoration:line-through}.menu s{color:#5f677d;margin-right:6px}.menu b{color:var(--navy)}.menu .tag{margin:0 0 0 6px}
+.meta{display:grid;gap:4px;color:var(--mut);font-size:.85rem;margin-top:auto}.meta span{display:flex;gap:8px;align-items:center}
+.nitem{display:grid;grid-template-columns:260px 1fr;gap:24px;padding:26px 0;border-bottom:1px solid var(--line)}.nitem:first-child{padding-top:0}.nitem.noimg{grid-template-columns:1fr}
+.nitem .im{aspect-ratio:16/10;border-radius:14px;overflow:hidden;background:var(--tint)}.nitem .im img{width:100%;height:100%;object-fit:cover;display:block}
+.nitem time{color:var(--mut);font-size:.85rem}.flag{display:inline-block;background:#fff3dc;color:#6b4300;font-weight:700;font-size:.75rem;padding:2px 9px;border-radius:6px;margin-left:8px}
+@media(max-width:759px){.nitem{grid-template-columns:1fr;gap:14px}}
+.contact{display:flex;gap:24px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;margin-top:24px}.contact p{margin:0;max-width:52ch}
+.enter h2,.enter .cards>*{animation:rise 280ms var(--ease) both}.enter .cards>:nth-child(2){animation-delay:40ms}.enter .cards>:nth-child(3){animation-delay:80ms}.enter .cards>:nth-child(4){animation-delay:120ms}.enter .cards>:nth-child(n+5){animation-delay:160ms}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:12px;padding:13px 22px;font:700 1rem Figtree,sans-serif;color:#fff;background:var(--g);cursor:pointer;text-decoration:none;box-shadow:0 8px 16px -8px rgba(52,102,196,.7);transition:transform 120ms var(--ease),box-shadow 160ms var(--ease)}
+.btn:active{transform:scale(.97)}@media(hover:hover) and (pointer:fine){.btn:hover{box-shadow:0 12px 22px -8px rgba(52,102,196,.7)}}
+.btn.sec,.btn.ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1px #cfd6e8;padding:12px 20px}.btn.no{background:#b3261e;box-shadow:none}.btn[disabled]{opacity:.55;pointer-events:none}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:600px){.g{grid-template-columns:1fr}}
+label{display:block;font-size:.85rem;font-weight:600;color:var(--mut)}input,textarea,select{width:100%;margin-top:6px;padding:11px 12px;border:1px solid #7f89a8;border-radius:10px;font:inherit;color:var(--ink);background:#fff;transition:border-color 160ms var(--ease),box-shadow 160ms var(--ease)}
+textarea{min-height:90px}input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(63,122,216,.22)}input[type=checkbox]{accent-color:var(--blue-d)}
+button:focus-visible,a:focus-visible{outline:3px solid rgba(63,122,216,.5);outline-offset:2px}
+.msg{margin-top:12px;font-weight:600}.err{color:#b3261e}.ok{color:#17703a}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0 20px}.tabs button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;font:600 .9rem Figtree,sans-serif;color:var(--ink);cursor:pointer;transition:transform 120ms var(--ease)}.tabs button:active{transform:scale(.97)}.tabs button.on{background:var(--g);color:#fff;border-color:transparent}
+.mrow{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:end;margin-bottom:8px}@media(max-width:600px){.mrow{grid-template-columns:1fr 1fr}}
+.pre{white-space:pre-wrap}.tag{font-size:.8rem;color:var(--violet);font-weight:700}.prev{max-width:240px;max-height:160px;border-radius:12px;margin-top:8px;display:block}
+.vacio{border:1.5px dashed #bcc6e6;border-radius:16px;padding:24px;text-align:center;color:var(--mut);background:rgba(255,255,255,.6)}
+.tw{overflow-x:auto}table{border-collapse:collapse;font-size:.85rem;width:100%;background:#fff;border:1px solid var(--line);border-radius:12px;font-variant-numeric:tabular-nums}th{background:var(--tint);color:var(--navy)}td,th{border-bottom:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border:1px solid var(--line);border-radius:14px;margin:6px 0 8px}.kpis>div{padding:16px 18px;display:flex;flex-direction:column;gap:2px;border-right:1px solid var(--line)}.kpis>div:last-child{border:0}
+.kpis b{font:700 1.8rem Sora,sans-serif;color:var(--navy);font-variant-numeric:tabular-nums}
+@media(max-width:759px){.kpis{grid-template-columns:1fr 1fr}.kpis>div:nth-child(2){border-right:0}.kpis>div:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+.bar{flex:1;min-width:4px;background:var(--g);border-radius:4px 4px 0 0}
+.cred{max-width:400px;margin:26px auto 0;background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 22px 40px -24px rgba(40,60,140,.45)}
+.ch{background:var(--g);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px}.ch b{font:800 .8rem Sora,sans-serif;letter-spacing:.05em}.ch{flex-wrap:wrap}.ch .ce{margin-left:auto}.brandc{display:flex;align-items:center;gap:10px}.ins{width:36px;height:36px;background:#fff;border-radius:10px;padding:3px;object-fit:contain;flex:none}
+.insg{width:92px;height:92px;border-radius:50%;background:#fff;margin:0 auto 16px;display:grid;place-items:center;box-shadow:0 10px 22px -10px rgba(0,0,0,.45)}.insg img{width:64px;height:64px;object-fit:contain}
+.cb2{padding:22px 20px;text-align:center}.cname{font:700 1.3rem/1.25 Sora,sans-serif;color:var(--navy)}.cdni{color:var(--ink);margin-top:2px;font-variant-numeric:tabular-nums}
+.qrbox{width:min(270px,100%);margin:16px auto 10px;border:1px solid var(--line);border-radius:14px;padding:10px;background:#fff}.qrbox svg{display:block;width:100%;height:auto}
+.timer{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin:0 auto 10px;width:min(270px,100%)}.timer i{display:block;height:100%;background:var(--g);transform-origin:left;animation:tick 55s linear forwards}
+@keyframes tick{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.ce{display:inline-block;padding:3px 12px;border-radius:99px;font-weight:700;font-size:.78rem;white-space:nowrap}.e-ok{background:#fff;color:var(--blue-d);display:inline-flex;gap:5px;align-items:center}.e-no{background:#fde4e1;color:#8a1b13}.e-pe{background:#fff3dc;color:#6b4300}
+.vres{border-radius:20px;padding:30px 20px;text-align:center;color:#fff;max-width:460px;margin:0 auto}.vres.ok{background:var(--g)}.vres.no{background:#b3261e}.vres b{display:block;font:800 2.6rem/1.1 Sora,sans-serif;letter-spacing:.02em}.vres .vn{font:700 1.35rem Sora,sans-serif;margin-top:14px}.vres div{margin-top:4px}
+.ctabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:22px 0 24px}.ctabs button{position:relative;flex:0 0 auto;border:0;background:none;padding:12px 18px;font:600 .98rem Figtree,sans-serif;color:var(--mut);cursor:pointer;transition:color 160ms var(--ease)}.ctabs button.on{color:var(--navy)}.ctabs button.on:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;border-radius:3px;background:var(--g)}@media(hover:hover) and (pointer:fine){.ctabs button:not(.on):hover{color:var(--ink)}}@media(max-width:759px){.ctabs button{flex:1}}
+.seg{display:inline-flex;gap:4px;padding:4px;background:var(--tint);border-radius:12px;margin:18px 0 16px}.seg button{border:0;background:none;padding:8px 16px;border-radius:9px;font:600 .92rem Figtree,sans-serif;color:var(--ink);cursor:pointer}.seg button.on{background:#fff;box-shadow:0 1px 3px rgba(40,60,140,.2)}
+.chk{display:flex;gap:10px;align-items:flex-start;font-weight:400;color:var(--ink);margin:14px 0}.chk input{width:auto;margin-top:5px}
+dialog{border:0;border-radius:18px;padding:0;width:min(640px,92vw);color:var(--ink);box-shadow:0 30px 60px -20px rgba(20,30,70,.5)}dialog::backdrop{background:rgba(20,30,70,.45)}.dlg{padding:26px;max-height:82vh;overflow:auto}.dlg p{margin:0 0 12px}
+.chans{display:grid;gap:12px;margin-top:26px;max-width:480px}.chans .btn{justify-content:flex-start}.btn.wa{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1px #cfd6e8}.btn.wa .ic{color:#128c4a}
+.cookies{position:fixed;left:12px;right:12px;bottom:12px;z-index:40;max-width:900px;margin:0 auto;background:#fff;border:1px solid #b8c2de;border-radius:16px;padding:16px 18px;box-shadow:0 18px 40px -12px rgba(20,30,70,.45);display:flex;gap:14px 24px;align-items:center;justify-content:space-between;flex-wrap:wrap}.cookies p{margin:0;flex:1 1 380px;font-size:.92rem}
+@media(max-width:759px){.cookies{bottom:calc(84px + env(safe-area-inset-bottom))}}
+.rt{width:100%;font-size:.85rem;margin:0 0 12px}.rt td{vertical-align:top}.dlg h3{font-size:1rem;margin:18px 0 6px}.dlg .legal{font-size:.8rem;color:var(--mut)}
+#baja h3{font-size:1.05rem;margin:0 0 6px}#baja .card p{margin:0 0 14px}
+footer{background:var(--navy);color:#dfe5fb;padding:36px 0 calc(36px + 70px)}@media(min-width:760px){footer{padding-bottom:36px}}
+.fw{display:flex;flex-wrap:wrap;gap:14px 32px;justify-content:space-between;align-items:center}footer a{color:#fff;display:inline-flex;gap:8px;align-items:center;font-weight:600}footer .sm{color:#b3bde0}
+/* footer siempre abajo */
+body{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;padding-bottom:0}
+main{flex:1 0 auto}
+footer{margin-top:auto;flex-shrink:0}
+</style></head><body>
+<a class="skip" href="#main">Saltar al contenido</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9v1a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0V9"/><path d="M5 12.5V20h14v-7.5"/><path d="M10 20v-4h4v4"/></symbol>
+<symbol id="i-news" viewBox="0 0 24 24"><path d="M4 5h12v14H6a2 2 0 0 1-2-2z"/><path d="M16 9h4v8a2 2 0 0 1-2 2h-2"/><path d="M7 9h6M7 13h6M7 16h3"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-insta" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".7" fill="currentColor"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-5.6 7-11a7 7 0 0 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+<symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.2"/></symbol>
+<symbol id="i-utensils" viewBox="0 0 24 24"><path d="M6 3v7a2 2 0 0 0 4 0V3M8 3v18"/><path d="M17 3c-2 2-3 4.5-3 7h3v11"/></symbol>
+<symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="10" y="10" width="4" height="4"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-8-4.7-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 9c0 6.3-8 11-8 11z"/></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></symbol>
+<symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M6 16c.6-1.6 1.8-2.2 3-2.2s2.4.6 3 2.2M14 10h4M14 13h3"/></symbol>
+<symbol id="i-cap" viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></symbol>
+<symbol id="i-wa" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-11.9 7L4 20l1.1-4A8 8 0 1 1 20 12z"/><path d="M9.2 8.6c-.3.5-.4 1.3.2 2.3a8 8 0 0 0 3.5 3c1 .4 1.7.1 2.1-.4l.3-.8-1.6-.9-.7.6c-.7-.3-1.6-1.2-1.9-1.9l.6-.7-.8-1.6z"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+<symbol id="i-mega" viewBox="0 0 24 24"><path d="M4 10v4l12 5V5z"/><path d="M16 9a3 3 0 0 1 0 6"/></symbol>
+</defs></svg>
+<header class="top"><div class="wrap tb"><a class="brand" id="home" href="./" aria-label="Ir al inicio"><img src="images/icono-at.png" alt=""><span>ALTERNATIVA<br>TECNOLÓGICA</span></a>
+<nav aria-label="Secciones"><button data-t="becas"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-book"/></svg><span>Becas</span></button><button data-t="club"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-store"/></svg><span>Club AT</span></button><button data-t="cursos" id="navCursos" hidden><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-cap"/></svg><span>Visitas y/o cursos</span></button><button data-t="prestamos" id="navPrest" hidden><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-box"/></svg><span>Préstamos</span></button><button data-t="noticias"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-news"/></svg><span>Novedades</span></button><button data-t="contacto"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg><span>Contacto</span></button><button data-t="panel" id="navPanel" hidden><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-lock"/></svg><span>Panel</span></button></nav></div></header>
+<section id="hero"><div class="wrap hw"><div class="hcopy"><h1 class="slogan">Tu voz, nuestro compromiso</h1>
+<p class="hsub">Centro Único de Estudiantes Tecnológicos de Tucumán. Becas de fotocopias, descuentos en comercios y todas las novedades del centro, en un solo lugar.</p>
+<div class="row"><a class="btn" id="hForm" target="_blank" rel="noopener" data-clic="inscribirme-hero">Inscribirme a las becas<svg class="ic" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><button class="btn ghost" id="hClub">Ver el Club AT</button></div></div>
+<div class="hlogo"><a href="./" id="home2" aria-label="Ir al inicio"><img src="images/logo-at.png" alt="Alternativa Tecnológica" width="482" height="475"></a></div></div></section>
+<main id="main"><div class="wrap">
+<section id="becas" hidden><h2 class="t" style="margin:0">Becas de fotocopias</h2><p class="lead">Participá del sorteo mensual para estudiantes de Ingeniería.</p>
+<ol class="steps"><li><span class="n">1</span><h3>Completá el formulario</h3><p>Apellido, nombre, DNI, legajo (5 números), carrera, mail y celular.</p></li><li><span class="n">2</span><h3>Esperá el sorteo</h3><p>Se hace una vez por mes entre todos los inscriptos.</p></li><li><span class="n">3</span><h3>Retirá tu beca</h3><p>Si salís sorteado/a, te avisamos por mail o WhatsApp.</p></li></ol>
+<div class="who"><div><h3>Quiénes pueden participar</h3><ul><li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Ingeniería Mecánica</li><li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Ingeniería Eléctrica</li><li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Ingeniería Electrónica</li><li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Ingeniería Civil</li><li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-check"/></svg>Ingeniería en Sistemas de Información</li></ul></div>
+<div><h3>Cuándo</h3><p>La inscripción se abre cada mes. Si ya ganaste antes, podés volver a anotarte.</p><p class="cta" id="bBtn"></p><p class="sm">Tus datos se usan solo con fines estadísticos y de gestión interna. <a href="#" data-tyc>Ver términos y condiciones</a></p></div></div></section>
+<section id="club" hidden><h2 class="t" style="margin:0">Club Alternativa Tecnológica</h2><p class="lead">Descuentos y menús especiales para estudiantes en los locales adheridos.</p>
+<div class="ctabs" id="clubTabs" role="tablist"><button data-ct="desc" class="on" role="tab">Descuentos</button><button data-ct="cred" role="tab">Mi credencial</button></div>
+<div id="clubDesc"><p class="sm" style="margin:0 0 4px">Para usar los descuentos presentá tu credencial digital de socio. <a href="#credencial" data-go="credencial">Obtener mi credencial</a></p><div class="search"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Buscar local, categoría o plato" aria-label="Buscar local, categoría o plato"></div><div class="chips" id="chips"></div><div id="cl"></div></div>
+<div id="clubCred" hidden><p class="lead" style="margin:0">Tu credencial digital para usar los descuentos del Club. Se valida con un QR que se renueva todos los días.</p><div id="cbox"></div></div></section>
+<section id="cursos" hidden><h2 class="t" style="margin:0">Visitas y/o cursos</h2><p class="lead">Actividades organizadas por el centro de estudiantes. Inscribite completando tus datos.</p><div id="cursl" style="margin-top:26px"></div></section>
+<section id="prestamos" hidden><h2 class="t" style="margin:0">Préstamo de materiales</h2><p class="lead">Pedí prestado un set de mate, una calculadora, una pelota y más. Completá tus datos y te contactamos para coordinar el retiro.</p><div id="prl" style="margin-top:26px"></div></section>
+<section id="baja" hidden><h2 class="t" style="margin:0">Darme de baja</h2><p class="lead">Podés eliminar tus datos cuando quieras, en un solo paso, gratis y sin dar explicaciones.</p>
+<div class="g" style="margin-top:26px;align-items:start"><div class="card"><h3>Mi credencial de socio</h3><p class="sm">Ingresá con tu legajo y tu clave para eliminar tu credencial y tus datos de socio.</p>
+<form id="fbs"><div class="g"><label>Legajo<input name="legajo" required inputmode="numeric" pattern="\d{5}" maxlength="5"></label><label>Clave<input name="clave" type="password" required autocomplete="current-password"></label></div><p style="margin-top:16px"><button class="btn no">Eliminar mi credencial y mis datos</button></p><div class="msg" id="fbsm" role="status"></div></form></div>
+<div class="card"><h3>Inscripciones y préstamos</h3><p class="sm">Eliminá tus datos de inscripciones a visitas y cursos y de pedidos de préstamo de materiales.</p>
+<form id="fbi"><div class="g"><label>Legajo<input name="legajo" required inputmode="numeric" pattern="\d{5}" maxlength="5"></label><label>DNI (sin puntos)<input name="dni" required inputmode="numeric" pattern="\d{7,8}" maxlength="8"></label></div><label style="margin-top:12px">Mail con el que te inscribiste<input name="mail" type="email" required></label><p style="margin-top:16px"><button class="btn no">Eliminar mis datos</button></p><div class="msg" id="fbim" role="status"></div></form></div></div>
+<div class="card" style="margin-top:20px"><h3>Otras bajas</h3><p>Si te anotaste en las becas de fotocopias (formulario de Google) o querés retirar una imagen tuya, escribinos por Instagram y lo resolvemos. Para dejar de ser medido con estadísticas de visitas, cambiá tu elección en <a href="#" data-cookies>Preferencias de cookies</a>.</p></div></section>
+<section id="verificar" hidden></section>
+<section id="noticias" hidden><h2 class="t" style="margin:0 0 26px">Noticias y novedades</h2><div class="news" id="ns"></div></section>
+<section id="contacto" hidden><h2 class="t" style="margin:0">Contacto</h2><p class="lead">Seguinos y sumate a nuestros canales de difusión para enterarte de todo.</p>
+<div class="chans"><a class="btn" target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/alternativatecnologica/" data-clic="instagram"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-insta"/></svg>@alternativatecnologica</a>
+<a class="btn wa" target="_blank" rel="noopener noreferrer" href="https://whatsapp.com/channel/0029VasYqrT9Gv7V5UHXHY0F" data-clic="wa-casa"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-wa"/></svg>Canal de difusión AT (Casa Central)</a>
+<a class="btn wa" target="_blank" rel="noopener noreferrer" href="https://whatsapp.com/channel/0029VbCNGPl9WtC4aciLvK3b" data-clic="wa-anexo"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-wa"/></svg>Canal de difusión AT (Anexo Concepción)</a></div>
+<p class="sm" style="margin-top:20px">Para consultas o para sumar tu comercio al Club, escribinos por Instagram.</p></section>
+<section id="panel" hidden></section>
+</div></main>
+<footer><div class="wrap fw"><div><b>Alternativa Tecnológica</b> · Tu voz, nuestro compromiso<br><span class="sm">Centro Único de Estudiantes Tecnológicos de Tucumán. Este sitio registra visitas con fines estadísticos.</span></div>
+<div class="row" style="gap:12px 22px"><a href="#" data-tyc>Términos y privacidad</a><a href="#baja" data-go="baja">Darme de baja</a><a href="#" data-cookies>Preferencias de cookies</a><a href="https://www.instagram.com/alternativatecnologica/" target="_blank" rel="noopener noreferrer" data-clic="instagram"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-insta"/></svg>@alternativatecnologica</a></div></div></footer>
+<div id="cookies" class="cookies" role="region" aria-label="Preferencias de cookies" hidden><p><b>Tu privacidad.</b> Usamos almacenamiento necesario para que la página funcione. Con tu permiso, también medimos visitas con fines estadísticos (secciones visitadas, tiempo y dirección IP). <a href="#" data-tyc>Más información</a></p><div class="row"><button class="btn" id="ckSi">Aceptar estadísticas</button><button class="btn sec" id="ckNo">Solo lo necesario</button></div></div>
+<dialog id="tyc" aria-labelledby="tyct"><form method="dialog" class="dlg"><h2 class="t" id="tyct" style="font-size:1.4rem;margin:0 0 4px">Términos, privacidad y cookies</h2><p class="sm" style="margin:0">Versión 2026-11-15</p>
+<h3>Quién es responsable</h3><p>Alternativa Tecnológica, Centro Único de Estudiantes Tecnológicos de Tucumán. Para consultas sobre tus datos escribinos por Instagram a @alternativatecnologica.</p>
+<h3>Qué datos pedimos</h3><p>Según la actividad: nombre completo, DNI, legajo, carrera, mail y celular. Además registramos la fecha y hora en que aceptás estos términos y tu dirección IP como constancia.</p>
+<h3>Para qué los usamos</h3><p>Con fines estadísticos (por ejemplo: cantidad de socios, uso de la credencial por comercio, participación en visitas, cursos y préstamos) y para la gestión interna de AT: validar tu condición de socio, organizar las actividades y los préstamos en los que participás y contactarte por ellos. No los usamos con fines comerciales ni publicitarios, y no los vendemos ni los cedemos a terceros.</p>
+<h3>Quién ve tus datos</h3><p>Las personas autorizadas de AT. Un comercio, al escanear tu credencial, ve solo tu nombre, tu DNI, tu carrera, la fecha y si la credencial está activa. Usamos proveedores de infraestructura (Cloudflare, GitHub y Google) que pueden almacenar datos en servidores ubicados fuera de la Argentina.</p>
+<h3>Cuánto tiempo los guardamos</h3><div class="tw"><table class="rt"><tr><th>Dato</th><th>Plazo</th></tr>
+<tr><td>Datos de socio y credencial</td><td>Mientras la credencial esté vigente y hasta 12 meses después de que venza o se desactive. Solicitudes rechazadas: 30 días. Solicitudes sin resolver: 90 días.</td></tr>
+<tr><td>Uso de la credencial en comercios</td><td>12 meses</td></tr>
+<tr><td>Inscripciones a visitas y cursos</td><td>12 meses desde la inscripción</td></tr>
+<tr><td>Préstamos de materiales</td><td>12 meses desde el pedido (si hay un material sin devolver, hasta que se devuelva)</td></tr>
+<tr><td>Respuestas del formulario de becas</td><td>12 meses</td></tr>
+<tr><td>Visitas al sitio (IP, secciones y tiempo)</td><td>12 meses</td></tr>
+<tr><td>Constancia de aceptación de estos términos</td><td>3 años. Si pedís la baja, se conserva sin tu nombre, DNI, legajo ni IP.</td></tr>
+<tr><td>Registro de cambios del panel (personal de AT)</td><td>2 años</td></tr></table></div><p>Pasados esos plazos los datos se eliminan automáticamente. Podés pedir que los eliminemos antes, cuando quieras.</p>
+<h3>Cookies y almacenamiento del navegador</h3><p>Usamos almacenamiento necesario para que el sitio funcione: tu sesión o tu credencial de socio, el comercio que elegiste para registrar usos y tu elección sobre cookies. Con tu permiso, también usamos un identificador temporal para medir visitas con fines estadísticos. Podés cambiar tu elección cuando quieras desde “Preferencias de cookies”, en el pie de página.</p>
+<h3>Imágenes y marcas</h3><p>Los comercios y usuarios que suben imágenes, logos o marcas declaran tener permiso para usarlos y se hacen responsables. Si sos titular de una imagen o marca y querés que la retiremos, escribinos y la sacamos.</p>
+<h3>Tus derechos y cómo darte de baja</h3><p>Podés pedir acceso, corrección o eliminación de tus datos, o darte de baja, cuando quieras y gratis, en un solo paso desde <a href="#baja" data-go="baja">Darme de baja</a>. Si alguna vez te escribimos por mail, cada mensaje incluirá ese mismo enlace para dejar de recibirlos.</p>
+<p class="legal">El titular de los datos personales tiene la facultad de ejercer el derecho de acceso a los mismos en forma gratuita a intervalos no inferiores a seis meses, salvo que se acredite un interés legítimo al efecto conforme lo establecido en el artículo 14, inciso 3 de la Ley Nº 25.326. La Agencia de Acceso a la Información Pública, en su carácter de Órgano de Control de la Ley Nº 25.326, tiene la atribución de atender las denuncias y reclamos que interpongan quienes resulten afectados en sus derechos por incumplimiento de las normas vigentes en materia de protección de datos personales.</p>
+<p class="row"><button class="btn">Entendido</button></p></form></dialog>
+<dialog id="dinsc"><form method="dialog" class="dlg" id="finsc"></form></dialog>
+<script>
+const CFG = {
+  API: 'https://at-api.reygutierrez1992.workers.dev',
+  FORM_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSelSflgIeY1Cjfvm86d5XQkXwmgSCoHqO4XIBjmd3uib_ksrQ/viewform',
+  SHEET_URL: 'https://docs.google.com/spreadsheets/d/1SGAwL3S53qk8C9Mf4jigURe9AZVKBiEcakXiRLFl6m4/edit?resourcekey=&gid=333771499#gid=333771499'
+};
+/* ---------- Generador de QR (sin librerías externas) ---------- */
+/* Generador de QR (modo byte, corrección L, versiones 1-20). Sin librerías externas. */
+const QR=(()=>{
+const ECC=[-1,7,10,15,20,26,18,20,24,30,18,20,24,26,30,22,24,28,30,28,28],NB=[-1,1,1,1,1,1,2,2,2,2,4,4,4,4,4,6,6,6,6,7,8];
+const raw=v=>{let r=(16*v+128)*v+64;if(v>=2){const n=Math.floor(v/7)+2;r-=(25*n-10)*n-55;if(v>=7)r-=36}return r};
+const dcw=v=>Math.floor(raw(v)/8)-ECC[v]*NB[v];
+const mul=(x,y)=>{let z=0;for(let i=7;i>=0;i--){z=(z<<1)^((z>>>7)*0x11D);z^=((y>>>i)&1)*x}return z};
+const rsGen=d=>{const r=Array(d).fill(0);r[d-1]=1;let t=1;for(let i=0;i<d;i++){for(let j=0;j<d;j++){r[j]=mul(r[j],t);if(j+1<d)r[j]^=r[j+1]}t=mul(t,2)}return r};
+const rsRem=(data,g)=>{const r=g.map(()=>0);for(const b of data){const f=b^r.shift();r.push(0);g.forEach((c,i)=>r[i]^=mul(c,f))}return r};
+function matrix(text){
+ const by=[...new TextEncoder().encode(text)];let v=1;
+ for(;v<=20;v++)if(4+(v<10?8:16)+by.length*8<=dcw(v)*8)break;
+ if(v>20)throw new Error('QR demasiado largo');
+ const bits=[],put=(x,n)=>{for(let i=n-1;i>=0;i--)bits.push((x>>>i)&1)};
+ put(4,4);put(by.length,v<10?8:16);by.forEach(b=>put(b,8));
+ const cap=dcw(v)*8;put(0,Math.min(4,cap-bits.length));put(0,(8-bits.length%8)%8);for(let p=0xEC;bits.length<cap;p^=0xEC^0x11)put(p,8);
+ const data=[];for(let i=0;i<bits.length;i+=8)data.push(parseInt(bits.slice(i,i+8).join(''),2));
+ const nb=NB[v],ec=ECC[v],rw=Math.floor(raw(v)/8),ns=nb-rw%nb,sl=Math.floor(rw/nb),g=rsGen(ec),bl=[];let k=0;
+ for(let i=0;i<nb;i++){const d=data.slice(k,k+sl-ec+(i<ns?0:1));k+=d.length;const e=rsRem(d,g);if(i<ns)d.push(0);bl.push(d.concat(e))}
+ const cw=[];for(let i=0;i<bl[0].length;i++)bl.forEach((b,j)=>{if(i!=sl-ec||j>=ns)cw.push(b[i])});
+ const n=v*4+17,m=Array.from({length:n},()=>Array(n).fill(false)),fn=Array.from({length:n},()=>Array(n).fill(false)),set=(x,y,d)=>{m[y][x]=d;fn[y][x]=true};
+ for(let i=0;i<n;i++){set(6,i,i%2==0);set(i,6,i%2==0)}
+ const fin=(cx,cy)=>{for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const d=Math.max(Math.abs(dx),Math.abs(dy)),x=cx+dx,y=cy+dy;if(x>=0&&x<n&&y>=0&&y<n)set(x,y,d!=2&&d!=4)}};
+ fin(3,3);fin(n-4,3);fin(3,n-4);
+ let al=[];if(v>1){const na=Math.floor(v/7)+2,st=Math.ceil((v*4+4)/(na*2-2))*2;al=[6];for(let p=n-7;al.length<na;p-=st)al.splice(1,0,p)}
+ al.forEach((a,i)=>al.forEach((b,j)=>{if(!((i==0&&j==0)||(i==0&&j==al.length-1)||(i==al.length-1&&j==0)))for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++)set(a+dx,b+dy,Math.max(Math.abs(dx),Math.abs(dy))!=1)}));
+ const fmt=mask=>{const dt=(1<<3)|mask;let r=dt;for(let i=0;i<10;i++)r=(r<<1)^((r>>>9)*0x537);const b=((dt<<10)|r)^0x5412,bt=i=>((b>>>i)&1)!=0;
+  for(let i=0;i<=5;i++)set(8,i,bt(i));set(8,7,bt(6));set(8,8,bt(7));set(7,8,bt(8));for(let i=9;i<15;i++)set(14-i,8,bt(i));
+  for(let i=0;i<8;i++)set(n-1-i,8,bt(i));for(let i=8;i<15;i++)set(8,n-15+i,bt(i));set(8,n-8,true)};
+ fmt(0);
+ if(v>=7){let r=v;for(let i=0;i<12;i++)r=(r<<1)^((r>>>11)*0x1F25);const b=(v<<12)|r;for(let i=0;i<18;i++){const t=((b>>>i)&1)!=0,a=n-11+i%3,c=Math.floor(i/3);set(a,c,t);set(c,a,t)}}
+ let i=0;for(let r=n-1;r>=1;r-=2){if(r==6)r=5;for(let vt=0;vt<n;vt++)for(let j=0;j<2;j++){const x=r-j,y=((r+1)&2)==0?n-1-vt:vt;if(!fn[y][x]&&i<cw.length*8){m[y][x]=((cw[i>>>3]>>>(7-(i&7)))&1)!=0;i++}}}
+ const MK=[(x,y)=>(x+y)%2==0,(x,y)=>y%2==0,(x,y)=>x%3==0,(x,y)=>(x+y)%3==0,(x,y)=>(Math.floor(x/3)+Math.floor(y/2))%2==0,(x,y)=>x*y%2+x*y%3==0,(x,y)=>(x*y%2+x*y%3)%2==0,(x,y)=>((x+y)%2+x*y%3)%2==0];
+ const ap=t=>{for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(!fn[y][x]&&MK[t](x,y))m[y][x]=!m[y][x]};
+ const pen=()=>{let r=0,dark=0;
+  for(let y=0;y<n;y++)for(const hz of[1,0]){let run=1;for(let x=1;x<=n;x++){const a=hz?m[y][x]:m[x]&&m[x][y],b=hz?m[y][x-1]:m[x-1][y];if(x<n&&a===b)run++;else{if(run>=5)r+=run-2;run=1}}}
+  for(let y=0;y<n-1;y++)for(let x=0;x<n-1;x++){const c=m[y][x];if(c===m[y][x+1]&&c===m[y+1][x]&&c===m[y+1][x+1])r+=3}
+  m.forEach(row=>row.forEach(c=>{if(c)dark++}));r+=Math.floor(Math.abs(dark*20-n*n*10)/(n*n))*10;return r};
+ let best=0,bp=1e9;for(let t=0;t<8;t++){ap(t);fmt(t);const p=pen();if(p<bp){bp=p;best=t}ap(t)}
+ ap(best);fmt(best);return m}
+function svg(text){const m=matrix(text),q=4,n=m.length;let d='';m.forEach((row,y)=>row.forEach((c,x)=>{if(c)d+='M'+(x+q)+' '+(y+q)+'h1v1h-1z'}));
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+(n+2*q)+' '+(n+2*q)+'" shape-rendering="crispEdges" role="img" aria-label="Código QR de tu credencial"><rect width="100%" height="100%" fill="#fff"/><path d="'+d+'" fill="#1c2a52"/></svg>'}
+return{matrix,svg}})();
 
-document.querySelector('nav button[data-t=contacto]').insertAdjacentHTML('beforebegin',
- '<button data-t="ideas" id="navIdeas" hidden>'+I('spark')+'<span>Ideas</span></button>');
-$('#navIdeas').onclick=()=>show('ideas',1);
 
-$('#panel').insertAdjacentHTML('beforebegin',
- '<section id="ideas" hidden><h2 class="t" style="margin:0">Ideas y consejos</h2>'
-+'<p class="lead">Contanos una idea para el centro, un consejo para otros estudiantes o lo que quieras mejorar. AT revisa cada aporte antes de publicarlo.</p>'
-+'<form class="card" id="fid" style="max-width:640px;margin-top:22px"><div class="g">'
-+'<label>Tipo<select name="tipo">'+TIPOS.map(t=>'<option>'+t+'</option>').join('')+'</select></label>'
-+'<label>Tu nombre o apodo (opcional)<input name="alias" maxlength="40" autocomplete="off"></label></div>'
-+'<label style="margin-top:14px">Tu mensaje<textarea name="texto" required minlength="10" maxlength="600"></textarea></label>'
-+'<input name="web" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">'
-+'<p class="sm">No escribas datos personales de otras personas. Podés enviarlo sin nombre.</p>'
-+'<p><button class="btn">Enviar</button></p><div class="msg" id="idm" role="status"></div></form>'
-+'<div id="idl" style="margin-top:34px"></div></section>');
+const $=s=>document.querySelector(s),esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const I=(n,c)=>'<svg class="ic'+(c?' '+c:'')+'" aria-hidden="true"><use href="#i-'+n+'"/></svg>';
+const money=n=>'$'+Number(n).toLocaleString('es-AR'),hoy=new Date().toISOString().slice(0,10),fdate=d=>String(d||'').slice(0,10).split('-').reverse().join('/');
+const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+let TK=sessionStorage.getItem('tk')||'',ME=null,LOC=[],CATS=[],NOT=[],cat='';
+async function api(p,b,tk){tk=tk===undefined?TK:tk;let r;
+ try{r=await fetch(CFG.API+p,{method:b?'POST':'GET',headers:{'content-type':'application/json',authorization:'Bearer '+tk},body:b?JSON.stringify(b):undefined})}
+ catch(e){let llega=true;try{await fetch(CFG.API+'/me',{mode:'no-cors'})}catch(_){llega=false}
+  throw new Error(llega?'El servicio responde pero el navegador lo bloquea. En Cloudflare, SITE_ORIGIN debe ser exactamente https://reygutierrez1992-gif.github.io (sin barra final ni el nombre del repositorio). Corregilo y tocá Deploy.':'No se encuentra el servicio. Revisá que la dirección API de index.html sea la de tu Worker (termina en workers.dev) y que el Worker esté publicado.')}
+ const j=await r.json().catch(()=>({error:'Respuesta inválida del servicio.'}));if(!r.ok){if(r.status==401&&tk===TK){TK='';sessionStorage.removeItem('tk')}throw new Error(j.error||'Error')}return j}
+/* ---------- Visitas (solo para estadísticas; no se cuenta a quien ya ingresó como usuario) ---------- */
+const SID=()=>{let v=sessionStorage.getItem('sid');if(!v){v=Math.random().toString(36).slice(2,12)+Date.now().toString(36);sessionStorage.setItem('sid',v)}return v};
+let secAct='',t0=Date.now();
+const trk=(tipo,seccion,seg)=>{if(TK||localStorage.getItem('noTrack')||localStorage.getItem('consent')!='si')return;try{navigator.sendBeacon(CFG.API+'/track',new Blob([JSON.stringify({tipo,sid:SID(),seccion,seg,ref:document.referrer})],{type:'text/plain'}))}catch(e){}};
+function iniciarVisitas(){if(localStorage.getItem('consent')!='si'||location.hash.startsWith('#v=')||sessionStorage.getItem('ini'))return;sessionStorage.setItem('ini','1');t0=Date.now();trk('ini','inicio',0)}
+function consentir(v){localStorage.setItem('consent',v);localStorage.setItem('consentTs',new Date().toISOString());$('#cookies').hidden=true;if(v=='si')iniciarVisitas();else{sessionStorage.removeItem('sid');sessionStorage.removeItem('ini')}}
+$('#ckSi').onclick=()=>consentir('si');$('#ckNo').onclick=()=>consentir('no');$('#cookies').hidden=localStorage.getItem('consent')!==null;
+function cerrarSec(){const s=Math.round((Date.now()-t0)/1000);if(secAct&&s>=1)trk('sec',secAct,s);t0=Date.now()}
+let CT='desc';
+function clubTab(t,sinHash){CT=t;document.querySelectorAll('#clubTabs button').forEach(b=>b.classList.toggle('on',b.dataset.ct==t));$('#clubDesc').hidden=t!='desc';$('#clubCred').hidden=t!='cred';if(t=='cred')renderCred();else clearInterval(credT);if(!sinHash)history.replaceState(null,'',t=='cred'?'#credencial':'#club')}
+document.querySelectorAll('#clubTabs button').forEach(b=>b.onclick=()=>clubTab(b.dataset.ct));
+function navPanel(){$('#navPanel').hidden=!TK}
+function show(id,sc){const cr=id=='credencial';if(cr)id='club';if(!['becas','club','cursos','prestamos','noticias','contacto','panel','verificar','baja'].includes(id))id='becas';clearInterval(credT);cerrarSec();secAct=(id=='panel'||id=='verificar')?'':id;
+ document.querySelectorAll('main section').forEach(s=>s.hidden=s.id!=id);$('#hero').hidden=id!='becas';
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==id));{const on=document.querySelector('nav button.on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'})}
+ if(sc){const h='#'+(id=='panel'?'acceso':(cr||(id=='club'&&CT=='cred'))?'credencial':id);if(location.hash!=h)history.replaceState(null,'',h)}
+ if(id=='panel')panel();if(id=='club')clubTab(cr?'cred':CT,true);if(sc)scrollTo({top:0,behavior:'instant'})}
+const LOGO_FB='<span class="logo-fb"><svg viewBox="0 0 100 90" aria-hidden="true"><defs><linearGradient id="lg1" x1="0" x2="1"><stop offset="0" stop-color="#3f7ad8"/><stop offset="1" stop-color="#7b57d8"/></linearGradient></defs><path d="M50 4 96 86H4Z" fill="url(#lg1)"/><text x="50" y="74" text-anchor="middle" font-size="34" font-weight="800" fill="#fff" font-family="Sora,sans-serif">AT</text></svg>ALTERNATIVA<br>TECNOLÓGICA</span>';
+document.querySelectorAll('#home2 img').forEach(i=>{const fb=()=>{i.parentNode.innerHTML=LOGO_FB};i.addEventListener('error',fb);if(i.complete&&i.naturalWidth===0)fb()});
+const irInicio=()=>{history.replaceState(null,'',location.pathname);show('becas');scrollTo({top:0,behavior:'smooth'})};
+$('#home').onclick=$('#home2').onclick=e=>{e.preventDefault();irInicio()};
+document.addEventListener('click',e=>{const a=e.target.closest('[data-clic]');if(a)trk('clic',a.dataset.clic,0)});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)cerrarSec();else t0=Date.now()});addEventListener('pagehide',cerrarSec);
+addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h.startsWith('v='))verif(h.slice(2));else show(h=='acceso'?'panel':(h||'becas'))});
+document.addEventListener('click',e=>{const a=e.target.closest('[data-tyc]');if(a){e.preventDefault();$('#tyc').showModal();return}const ck=e.target.closest('[data-cookies]');if(ck){e.preventDefault();$('#cookies').hidden=false;return}const g=e.target.closest('[data-go]');if(g){e.preventDefault();const dl=g.closest('dialog');if(dl&&dl.open)dl.close();show(g.dataset.go,1)}});
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.t,1));
+const IC={'Gastronomía':'utensils','Librería':'book','Tecnología':'cpu','Salud y gimnasio':'heart','Otro':'spark'},cico=c=>I(IC[c]||'tag');
+const img=(u,a)=>u?'<img src="'+esc(u)+'" alt="'+esc(a)+'" loading="lazy" decoding="async">':'<div class="ph">Imagen próximamente</div>';
 
-function renderIdeas(){
- $('#idl').innerHTML=IDEAS.length?'<h2 style="margin-top:0">Lo que compartieron</h2><div class="cards">'+IDEAS.map(i=>
-  '<article class="local"><div class="b"><span class="cat">'+I('spark')+esc(i.tipo)+'</span><div class="pre">'+esc(i.texto)+'</div>'
-  +'<div class="sm">'+esc(i.alias||'Anónimo')+' · '+fdate(i.fecha)+'</div></div></article>').join('')+'</div>'
-  :'<div class="vacio">Todavía no hay aportes publicados. ¡Sé el primero en escribir!</div>'}
+/* ---------- Público ---------- */
+$('#bBtn').innerHTML=CFG.FORM_URL?'<a class="btn" href="'+esc(CFG.FORM_URL)+'" target="_blank" rel="noopener" data-clic="inscribirme">Inscribirme ahora'+I('arrow')+'</a>':'<span class="sm">El formulario se habilita próximamente.</span>';
+if(CFG.FORM_URL)$('#hForm').href=CFG.FORM_URL;else $('#hForm').hidden=true;$('#hClub').onclick=()=>show('club',1);
+function card(l){const vig=!l.vigenteHasta||l.vigenteHasta>=hoy;
+ const it=(l.menu||[]).map(x=>{const f=Math.round(x.d?x.p*(1-x.d/100):x.p);return '<li'+(x.a?'':' class="out"')+'><span>'+esc(x.n)+(x.a?'':' (agotado)')+'</span><span>'+(x.p?(x.d?'<s>'+money(x.p)+'</s><b>'+money(f)+'</b><span class="tag">-'+x.d+'%</span>':'<b>'+money(x.p)+'</b>'):'')+'</span></li>'}).join('');
+ const meta=[[l.horario,'clock'],[l.direccion,'pin'],[l.telefono,'phone']].filter(m=>m[0]).map(m=>'<span>'+I(m[1])+esc(m[0])+'</span>').join('');
+ return '<article class="local"><div class="im">'+img(l.imagen,l.imagenAlt||'Foto de '+l.nombre)+'</div><div class="b"><div><h3>'+esc(l.nombre)+'</h3><span class="cat">'+cico(l.categoria)+esc(l.categoria)+'</span></div>'
+  +(l.descuento&&vig?'<div class="offer">'+I('tag')+esc(l.descuento)+'</div>':'')+(l.descripcion?'<p style="margin:0">'+esc(l.descripcion)+'</p>':'')
+  +(l.descuento&&vig&&(l.condiciones||l.vigenteHasta)?'<div class="sm">'+[l.condiciones,l.vigenteHasta?'Válido hasta '+fdate(l.vigenteHasta):''].filter(Boolean).map(esc).join(' · ')+'</div>':'')
+  +(it?'<ul class="menu">'+it+'</ul>':'')+(l.novedades?'<div class="pre sm" style="color:var(--ink)">'+esc(l.novedades)+'</div>':'')+(meta?'<div class="meta">'+meta+'</div>':'')+'</div></article>'}
+let clListo=false;
+function renderClub(){const q=norm($('#q').value);
+ $('#chips').innerHTML=['Todas',...CATS].map(c=>'<button class="chip'+((c=='Todas'?'':c)==cat?' on':'')+'" data-c="'+esc(c=='Todas'?'':c)+'">'+(c=='Todas'?I('grid'):cico(c))+esc(c)+'</button>').join('');
+ $('#chips').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{cat=b.dataset.c;renderClub()});
+ const hay=l=>norm([l.nombre,l.categoria,l.descripcion,l.descuento,(l.menu||[]).map(x=>x.n).join(' ')].join(' ')).includes(q);
+ let h='',total=0;(cat?[cat]:CATS).forEach(c=>{const ls=LOC.filter(l=>l.categoria==c&&hay(l));total+=ls.length;
+  if(ls.length)h+='<h2>'+cico(c)+esc(c)+'</h2><div class="cards">'+ls.map(card).join('')+'</div>';else if(!q)h+='<h2>'+cico(c)+esc(c)+'</h2><div class="vacio">Próximamente: locales de esta categoría.</div>'});
+ $('#cl').classList.toggle('enter',!clListo);clListo=true;
+ $('#cl').innerHTML=h+(q&&!total?'<p>No encontramos resultados para “'+esc($('#q').value)+'”.</p>':'')}
+$('#q').oninput=renderClub;
+function renderNot(){
+ $('#ns').innerHTML=NOT.length?NOT.map(n=>'<article class="nitem'+(n.imagen?'':' noimg')+'">'+(n.imagen?'<div class="im">'+img(n.imagen,n.imagenAlt||'Imagen de la noticia: '+n.titulo)+'</div>':'')+'<div><time>'+fdate(n.fecha)+'</time>'+(n.importante?'<span class="flag">Importante</span>':'')+'<h3 style="margin:6px 0 8px">'+esc(n.titulo)+'</h3><div class="pre">'+esc(n.contenido||n.texto)+'</div></div></article>').join(''):'<div class="vacio">Todavía no hay noticias. Pronto vas a encontrar novedades del centro de estudiantes.</div>'}
+const get=u=>fetch(u+'?'+Date.now()).then(r=>r.ok?r.json():null).catch(()=>null);
+Promise.all([get('data/locales.json'),get('data/noticias.json')]).then(([d,n])=>{LOC=((d&&d.locales)||[]).filter(l=>l.activo!==false);CATS=[...new Set([...((d&&d.categorias)||[]),...LOC.map(l=>l.categoria).filter(Boolean)])];NOT=((n&&n.noticias)||[]).filter(x=>x.activo!==false);renderClub();renderNot()});
 
-async function cargarIdeas(){try{const r=await api('/ideas',null,'');$('#navIdeas').hidden=!r.activo;IDEAS=r.items||[];renderIdeas()}catch(e){}}
+/* ---------- Utilidades de edición ---------- */
+function img2data(f){return new Promise(ok=>{const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,900/i.width),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.82))};i.src=r.result};r.readAsDataURL(f)})}
+const fld=(lb,n,v,x)=>'<label>'+lb+'<input name="'+n+'" value="'+esc(v)+'" '+(x||'')+'></label>';
+const permisoChk='<label class="chk"><input type="checkbox" name="permisoImagen"><span>Declaro que tengo permiso para usar las imágenes, logos y marcas que subo y me hago responsable de ellas.</span></label>';
+const imgField=(id,cur)=>'<label>Imagen (tocá para subir una foto)<input type="file" accept="image/*" id="'+id+'"></label><img class="prev" id="'+id+'p" '+(cur?'src="'+esc(cur)+'"':'hidden')+' alt="Vista previa de la imagen elegida">';
+function prevHook(id){$('#'+id).onchange=async e=>{const f=e.target.files[0];const pc=document.querySelector('input[name=permisoImagen]');if(pc)pc.required=!!f;if(f){const p=$('#'+id+'p');p.src=await img2data(f);p.hidden=false}}}
+const mrow=x=>{x=x||{n:'',p:'',d:'',a:true};return '<div class="mrow"><label>Plato / menú<input class="n" maxlength="60" value="'+esc(x.n)+'"></label><label>Precio $<input class="p" inputmode="decimal" value="'+esc(x.p||'')+'"></label><label>Descuento %<input class="d" inputmode="numeric" value="'+esc(x.d||'')+'"></label><label><input type="checkbox" class="a" style="width:auto"'+(x.a?' checked':'')+'> Disponible</label></div>'};
+const mtxt=m=>(m||[]).map(x=>x.n+(x.p?' $'+x.p:'')+(x.d?' -'+x.d+'%':'')+(x.a?'':' (NO disponible)')).join('; ');
+const msgE=(m,e)=>{m.className='msg err';m.textContent=e.message};
+const dif=(o,c)=>{const r=[];Object.keys(c).forEach(k=>{if(k=='imagenData'){if(c[k])r.push('Imagen: nueva');return}const a=k=='menu'?mtxt(o.menu):o[k],b=k=='menu'?mtxt(c.menu):c[k];if(String(a||'')!=String(b||''))r.push(k+': "'+(a||'')+'" → "'+(b||'')+'"')});return r};
 
-$('#fid').onsubmit=async ev=>{ev.preventDefault();const m=$('#idm');m.className='msg';m.textContent='Enviando…';
- try{await api('/ideas/enviar',Object.fromEntries(new FormData(ev.target)),'');ev.target.reset();
-  okMsg(m,'¡Gracias! Tu aporte se publica cuando AT lo revise.')}catch(e){msgE(m,e)}};
+/* ---------- Credencial de socio ---------- */
+const CARR=['Ingeniería Mecánica','Ingeniería Eléctrica','Ingeniería Electrónica','Ingeniería Civil','Ingeniería en Sistemas de Información'];
+let SOC=localStorage.getItem('soc')||'',credT=null;
+const apiS=(p,b)=>api(p,b,SOC),carrOpts=()=>'<option value="">Elegí tu carrera</option>'+CARR.map(c=>'<option>'+esc(c)+'</option>').join('');
+const acepto='<label class="chk"><input type="checkbox" name="acepto" required><span>Acepto los <a href="#" data-tyc>términos, la privacidad y el tratamiento de mis datos</a> (versión 2026-11-15): se usarán con fines estadísticos y de gestión interna de AT, y quedará registrado cuándo acepté.</span></label>';
+function credForm(box,modo){modo=modo||'reg';
+ box.innerHTML='<div class="seg"><button data-m="reg" class="'+(modo=='reg'?'on':'')+'">Quiero mi credencial</button><button data-m="log" class="'+(modo=='log'?'on':'')+'">Ya me registré</button></div>'
+ +(modo=='reg'?'<form class="card" id="fc" style="max-width:600px"><div class="g">'+fld('Nombre completo','nombre','','required autocomplete="name" maxlength="80"')+fld('DNI (sin puntos)','dni','','required inputmode="numeric" pattern="\\d{7,8}" maxlength="8"')+fld('Legajo (5 números)','legajo','','required inputmode="numeric" pattern="\\d{5}" maxlength="5"')+'<label>Carrera<select name="carrera" required>'+carrOpts()+'</select></label>'+fld('Elegí una clave (mín. 6 caracteres)','clave','','required minlength="6" type="password" autocomplete="new-password"')+'</div>'+acepto+'<p class="sm">AT revisa tu solicitud. Cuando esté aprobada, vas a ver tu credencial en esta misma pantalla.</p><p><button class="btn">Enviar solicitud</button></p><div class="msg" id="fm"></div></form>'
+ :'<form class="card" id="fc" style="max-width:420px">'+fld('Legajo','legajo','','required inputmode="numeric" pattern="\\d{5}" maxlength="5"')+'<br>'+fld('Clave','clave','','required type="password" autocomplete="current-password"')+'<p><button class="btn">Ingresar</button></p><div class="msg" id="fm"></div></form>');
+ box.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>credForm(box,b.dataset.m));
+ $('#fc').onsubmit=async ev=>{ev.preventDefault();const m=$('#fm');m.className='msg';m.textContent='Enviando…';
+  try{const d=Object.fromEntries(new FormData(ev.target));if(modo=='reg')d.acepto=ev.target.acepto.checked;const j=await api(modo=='reg'?'/socio/registro':'/socio/login',d,'');SOC=j.token;localStorage.setItem('soc',SOC);renderCred()}catch(e){msgE(m,e)}}}
+const ESTC={pendiente:['e-pe','EN REVISIÓN','Recibimos tu solicitud. AT la está revisando: cuando se apruebe, vas a ver tu credencial acá.'],rechazado:['e-no','NO APROBADA','Tu solicitud no fue aprobada. Escribinos por Instagram si creés que es un error.'],inactivo:['e-no','INACTIVA','Tu credencial está inactiva. Consultá con AT.'],vencido:['e-no','VENCIDA','Tu credencial venció. Consultá con AT para renovarla.']};
+async function renderCred(){clearInterval(credT);const box=$('#cbox');
+ if(!SOC)return credForm(box);
+ const salir='<button class="btn ghost" id="cout">Cerrar sesión</button> <button class="btn ghost" id="cbaja">Darme de baja</button>',bind=()=>{const o=$('#cout');if(o)o.onclick=()=>{SOC='';localStorage.removeItem('soc');renderCred()};const a=$('#cact');if(a)a.onclick=renderCred;const bj=$('#cbaja');if(bj)bj.onclick=async()=>{if(!confirm('¿Eliminar tu credencial y tus datos de socio? No se puede deshacer.'))return;try{await apiS('/socio/baja',{});SOC='';localStorage.removeItem('soc');renderCred()}catch(e){alert(e.message)}}};
+ try{const s=await apiS('/socio/yo');
+  if(!s.activo){const m=ESTC[s.estado]||['e-no',s.estado,''];box.innerHTML='<div class="cred"><div class="ch"><span class="brandc"><img class="ins" src="images/icono-at.png" alt=""><b>ALTERNATIVA TECNOLÓGICA</b></span><span class="ce '+m[0]+'">'+m[1]+'</span></div><div class="cb2"><div class="cname">'+esc(s.nombre)+'</div><div class="cdni">DNI '+esc(s.dni)+'</div><p>'+m[2]+'</p><p class="row" style="justify-content:center"><button class="btn sec" id="cact">Actualizar estado</button>'+salir+'</p></div></div>';return bind()}
+  const dibujar=q=>{$('#qrb').innerHTML=QR.svg(location.origin+location.pathname+'#v='+q)};
+  box.innerHTML='<div class="cred"><div class="ch"><span class="brandc"><img class="ins" src="images/icono-at.png" alt=""><b>ALTERNATIVA TECNOLÓGICA</b></span><span class="ce e-ok">'+I('check')+'ACTIVO</span></div><div class="cb2"><div class="cname">'+esc(s.nombre)+'</div><div class="cdni">DNI '+esc(s.dni)+' · Legajo '+esc(s.legajo)+'</div><div class="sm">'+esc(s.carrera)+'</div><div class="qrbox" id="qrb"></div><p class="sm">Este QR es válido solo por hoy y se renueva todos los días. Mostralo en el comercio para usar tu descuento.'+(s.vence?' Vigente hasta '+fdate(s.vence)+'.':'')+'</p>'+salir+'</div></div>';
+  dibujar(s.qr);bind();
+  credT=setInterval(async()=>{if(document.hidden||$('#club').hidden||$('#clubCred').hidden)return;try{const n=await apiS('/socio/yo');if(n.activo)dibujar(n.qr);else renderCred()}catch(e){}},1800000)}
+ catch(e){if(/Sesión|registro ya no/.test(e.message)){SOC='';localStorage.removeItem('soc');return credForm(box)}box.innerHTML='<p class="msg err">'+esc(e.message)+'</p>'}}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&SOC&&!$('#club').hidden&&!$('#clubCred').hidden)renderCred()});
+/* ---------- Verificación (lo que ve el comercio al escanear el QR) ---------- */
+async function verif(tok){show('verificar');const box=$('#verificar'),lid=localStorage.getItem('miLocal')||'';box.innerHTML='<p class="sm">Verificando…</p>';
+ try{const r=await api('/verificar',{token:tok,localId:lid||undefined},''),ok=r.estado=='ACTIVO';
+  box.innerHTML='<h2 class="t" style="margin:0 0 20px;text-align:center">Verificación de socio</h2><div class="vres '+(ok?'ok':'no')+'"><div class="insg"><img src="images/icono-at.png" alt="Insignia de AT"></div><b>'+(ok?'ACTIVO':'INACTIVO')+'</b><div>'+esc(r.fecha)+'</div><div class="vn">'+esc(r.nombre)+'</div><div>DNI '+esc(r.dni)+'</div><div>'+esc(r.carrera)+'</div></div>'
+  +(lid?'<p class="sm" style="text-align:center;margin-top:16px">Uso registrado en <b>'+esc(r.local)+'</b>. <a href="#" id="chl">Cambiar comercio</a></p>':'<div class="card" style="max-width:460px;margin:18px auto 0"><label>¿En qué comercio estás? Así registramos el uso.<select id="sl"><option value="">Elegí tu comercio</option>'+LOC.map(l=>'<option value="'+esc(l.id)+'">'+esc(l.nombre)+'</option>').join('')+'</select></label></div>');
+  const sl=$('#sl');if(sl)sl.onchange=()=>{if(sl.value){localStorage.setItem('miLocal',sl.value);verif(tok)}};
+  const c=$('#chl');if(c)c.onclick=e=>{e.preventDefault();localStorage.removeItem('miLocal');verif(tok)}}
+ catch(e){box.innerHTML='<h2 class="t" style="margin:0 0 20px;text-align:center">Verificación de socio</h2><div class="vres no"><b style="font-size:1.6rem">No se pudo verificar</b><div>'+esc(e.message)+'</div></div>'}}
+/* ---------- Cursos y visitas ---------- */
+let CUR=[];
+function renderCursos(){$('#cursl').innerHTML=CUR.length?'<div class="cards">'+CUR.map(c=>{const abierto=c.estado=='abierto'&&(c.restantes===null||c.restantes>0);
+ return '<article class="local"><div class="b"><div><span class="cat">'+I(c.tipo=='visita'?'pin':'cap')+(c.tipo=='visita'?'Visita':'Curso')+'</span><h3>'+esc(c.titulo)+'</h3></div>'+(c.descripcion?'<p style="margin:0" class="pre">'+esc(c.descripcion)+'</p>':'')
+ +'<div class="meta">'+[[c.fecha,'clock'],[c.lugar,'pin'],[c.precio,'tag']].filter(m=>m[0]).map(m=>'<span>'+I(m[1])+esc(m[0])+'</span>').join('')+'</div>'+(c.restantes!==null?'<div class="sm">Cupos disponibles: '+c.restantes+'</div>':'')
+ +(abierto?'<button class="btn" data-insc="'+esc(c.id)+'">Inscribirme</button>':'<span class="offer" style="background:#eceef5;color:#3d4660">Inscripción cerrada</span>')+'</div></article>'}).join('')+'</div>':'<div class="vacio">Por ahora no hay actividades publicadas.</div>';
+ document.querySelectorAll('[data-insc]').forEach(b=>b.onclick=()=>abrirInsc(b.dataset.insc))}
+function abrirInsc(id){const c=CUR.find(x=>x.id==id),f=$('#finsc');
+ f.innerHTML='<h2 class="t" style="font-size:1.3rem;margin:0 0 4px">'+esc(c.titulo)+'</h2><p class="sm">Completá tus datos para inscribirte.</p><div class="g">'+fld('Nombre completo','nombre','','required maxlength="80"')+fld('DNI (sin puntos)','dni','','required inputmode="numeric" pattern="\\d{7,8}" maxlength="8"')+fld('Legajo (5 números)','legajo','','required inputmode="numeric" pattern="\\d{5}" maxlength="5"')+'<label>Carrera<select name="carrera" required>'+carrOpts()+'</select></label>'+fld('Mail','mail','','required type="email"')+fld('Celular (solo números)','celular','','required inputmode="tel"')+'</div>'+acepto+'<p class="row"><button class="btn" value="x" id="bi">Inscribirme</button><button class="btn sec" value="cancel" formnovalidate>Cancelar</button></p><div class="msg" id="mi"></div>';
+ $('#dinsc').showModal();
+ $('#bi').onclick=async ev=>{if(!f.checkValidity())return;ev.preventDefault();const m=$('#mi');m.className='msg';m.textContent='Enviando…';
+  try{const d=Object.fromEntries(new FormData(f));d.acepto=f.acepto.checked;d.cursoId=id;await api('/cursos/inscribir',d,'');f.innerHTML='<h2 class="t" style="font-size:1.3rem;margin:0 0 8px">¡Listo, quedaste inscripto/a!</h2><p>Te vamos a contactar por mail o celular con los detalles.</p><p><button class="btn">Cerrar</button></p>';cargarCursos()}catch(e){msgE(m,e)}}}
+async function cargarCursos(){try{const r=await api('/cursos',null,'');CUR=r.items||[];$('#navCursos').hidden=!r.activo;renderCursos()}catch(e){}}
 
-/* "show" ya no conoce la sección nueva: la envolvemos. */
-const _show=show;
-show=function(id,sc){
- if(id!='ideas')return _show(id,sc);
- clearInterval(credT);cerrarSec();secAct='';
- document.querySelectorAll('main section').forEach(s=>s.hidden=s.id!='ideas');$('#hero').hidden=true;
- document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t=='ideas'));
- if(sc){if(location.hash!='#ideas')history.replaceState(null,'','#ideas');scrollTo({top:0,behavior:'instant'})}};
-
-/* ================= IDEAS: panel del administrador ================= */
-async function ideasAdmin(){
- const sc=$('#sc'),d=await api('/ideas-admin');
- sc.innerHTML='<div class="card"><label class="chk" style="margin:0"><input type="checkbox" id="it"'+(d.activo?' checked':'')
- +'><span>Mostrar la sección “Ideas y consejos” en la página. Si la apagás, nadie puede ver ni enviar ideas.</span></label><div class="msg" id="itm"></div></div>'
- +'<div style="margin-top:16px">'+(d.items.length?d.items.map(i=>
-  '<div class="card" style="margin-bottom:10px"><div class="row"><span class="sm" style="flex:1">'+esc(i.tipo)+' · '+esc(i.alias||'Anónimo')+' · '+new Date(i.ts).toLocaleString('es-AR')
-  +'</span><span class="offer" style="'+(i.visible?'':'background:#eceef5;color:#3d4660')+'">'+(i.visible?'Visible':'Oculta')+'</span></div>'
-  +'<div class="pre" style="margin:10px 0">'+esc(i.texto)+'</div><p class="row" style="margin:0">'
-  +'<button class="btn sec" data-v="'+esc(i.id)+'" data-s="'+(i.visible?0:1)+'">'+(i.visible?'Ocultar':'Mostrar en la página')+'</button>'
-  +'<button class="btn no" data-x="'+esc(i.id)+'" style="padding:11px 16px">Eliminar</button></p></div>').join(''):'<div class="vacio">Todavía no llegaron ideas.</div>')+'</div>';
- $('#it').onchange=async e=>{const m=$('#itm');try{await api('/ideas-toggle',{activo:e.target.checked});okMsg(m,e.target.checked?'La sección ya se ve en la página.':'La sección quedó oculta.')}catch(er){e.target.checked=!e.target.checked;msgE(m,er)}};
- sc.querySelectorAll('[data-v]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{await api('/idea-estado',{id:b.dataset.v,visible:b.dataset.s=='1'});ideasAdmin()}catch(e){alert(e.message);b.disabled=false}});
- sc.querySelectorAll('[data-x]').forEach(b=>b.onclick=async()=>{if(!confirm('¿Eliminar este aporte? No se puede deshacer.'))return;try{await api('/idea-del',{id:b.dataset.x});ideasAdmin()}catch(e){alert(e.message)}})}
-
-const _adm=adminUI;
-adminUI=function(){
- _adm();
- const t=document.querySelector('.tabs');if(!t||!(ME.role=='admin'||ME.perms.noticias))return;
- t.insertAdjacentHTML('beforeend','<button data-s="ideas">Ideas</button>');
- const b=t.lastElementChild;
- b.onclick=()=>{t.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));$('#sc').innerHTML='<p class="sm">Cargando…</p>';
-  ideasAdmin().catch(e=>{$('#sc').innerHTML='<p class="msg err">'+esc(e.message)+'</p>'})}};
-
-/* ================= PRÉSTAMOS: borrar historial ================= */
-const _prest=prest;
-prest=async function(){
- await _prest();
- const prr=$('#prr');if(!prr)return;
- prr.insertAdjacentHTML('beforebegin','<div class="card" id="ptb" style="margin-top:16px"><h2 style="margin-top:0">Borrar historial</h2>'
- +'<p class="sm">Tildá los pedidos de la tabla y eliminalos, o borrá por fecha y estado. Los materiales “entregados” (sin devolver) no se borran salvo que lo confirmes expresamente.</p>'
- +'<p class="row"><button class="btn no" id="pdsel">Eliminar los seleccionados</button></p>'
- +'<div class="g"><label>Borrar pedidos anteriores a<input type="date" id="pdate"></label><label>Solo con estado<select id="pdest"><option value="">Cualquiera</option><option>devuelto</option><option>cancelado</option><option>pendiente</option></select></label></div>'
- +'<p class="row"><button class="btn no" id="pdf">Eliminar por fecha o estado</button><button class="btn no" id="pdall">Borrar todo el historial</button></p><div class="msg" id="pdm" role="status"></div></div>');
-
- const enh=()=>{const t=$('#prr table');if(!t||t.dataset.x)return;t.dataset.x=1;
-  t.querySelectorAll('tr').forEach((tr,i)=>{const sl=tr.querySelector('select[data-id]');if(i&&!sl)return;
-   tr.insertAdjacentHTML('afterbegin',i?'<td><input type="checkbox" class="psel" value="'+esc(sl.dataset.id)+'" aria-label="Seleccionar pedido" style="width:auto;margin:0"></td>'
-    :'<th><input type="checkbox" id="pall" aria-label="Seleccionar todos" style="width:auto;margin:0"></th>')});
-  const a=$('#pall');if(a)a.onchange=()=>document.querySelectorAll('.psel').forEach(c=>c.checked=a.checked)};
- enh();new MutationObserver(enh).observe(prr,{childList:true});
-
- const m=$('#pdm');
- const borrar=async(body,txt)=>{
-  if(!confirm(txt+'\n\nNo se puede deshacer.'))return;
-  m.className='msg';m.textContent='Eliminando…';
-  try{const r=await api('/prestamos/borrar',body);
-   okMsg(m,'Listo: se eliminaron '+r.borrados+' pedido'+(r.borrados==1?'':'s')+'.'+(r.omitidos?' Se conservaron '+r.omitidos+' sin devolver.':''));
-   $('#pb').click()}catch(e){msgE(m,e)}};
-
- $('#pdsel').onclick=()=>{
-  const ch=[...document.querySelectorAll('.psel:checked')];
-  if(!ch.length){msgE(m,new Error('Tildá al menos un pedido.'));return}
-  const ent=ch.filter(c=>{const s=c.closest('tr').querySelector('select');return s&&s.value=='entregado'}).length;
-  let forzar=false;
-  if(ent)forzar=confirm('Hay '+ent+' pedido(s) “entregado(s)” sin devolver. ¿Borrarlos igual?\nAceptar = sí, borrarlos. Cancelar = conservarlos.');
-  borrar({ids:ch.map(c=>c.value),forzar},'¿Eliminar '+ch.length+' pedido(s) seleccionado(s)?')};
-
- $('#pdf').onclick=()=>{
-  const antes=$('#pdate').value,estado=$('#pdest').value;
-  if(!antes&&!estado){msgE(m,new Error('Elegí una fecha, un estado o ambos.'));return}
-  borrar({antes,estado},'¿Eliminar los pedidos'+(estado?' en estado “'+estado+'”':'')+(antes?' anteriores al '+fdate(antes):'')+'?')};
-
- $('#pdall').onclick=()=>borrar({todo:true},'¿Borrar TODO el historial de préstamos? Solo se conservan los materiales sin devolver.')};
-
-/* Carga inicial */
-cargarIdeas();
-if(location.hash=='#ideas')show('ideas');
-})();
+/* ---------- Préstamo de materiales ---------- */
+let MAT=[];
+async function cargarPrest(mostrar){try{const r=await api('/prestamos',null,'');MAT=r.items||[];$('#navPrest').hidden=!r.hay;if(mostrar!==false)renderPrest()}catch(e){}}
+function renderPrest(){const box=$('#prl');
+ if(!MAT.length){box.innerHTML='<div class="vacio">Por ahora no hay materiales disponibles para prestar. Volvé a consultar más tarde.</div>';return}
+ const ahora=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16);
+ box.innerHTML='<form class="card" id="fp" style="max-width:640px"><label>¿Qué material necesitás?<select name="materialId" required><option value="">Elegí un material</option>'+MAT.map(m=>'<option value="'+esc(m.id)+'">'+esc(m.nombre)+(m.descripcion?' — '+esc(m.descripcion):'')+' ('+m.disponibles+' disponible'+(m.disponibles>1?'s':'')+')</option>').join('')+'</select></label>'
+ +'<div class="g" style="margin-top:14px">'+fld('Nombre completo','nombre','','required maxlength="80" autocomplete="name"')+'<label>Carrera<select name="carrera" required>'+carrOpts()+'</select></label>'+fld('Legajo (5 números)','legajo','','required inputmode="numeric" pattern="\\d{5}" maxlength="5"')+fld('Mail','mail','','required type="email" autocomplete="email"')+fld('Celular de contacto','celular','','required inputmode="tel" autocomplete="tel"')+'<label>Fecha y hora en que lo retirás<input type="datetime-local" name="retiro" min="'+ahora+'" required></label></div>'
+ +acepto+'<p><button class="btn">Pedir préstamo</button></p><div class="msg" id="pm"></div></form>';
+ $('#fp').onsubmit=async ev=>{ev.preventDefault();const m=$('#pm');m.className='msg';m.textContent='Enviando…';
+  try{const d=Object.fromEntries(new FormData(ev.target));d.acepto=ev.target.acepto.checked;const r=await api('/prestamos/pedir',d,'');
+   box.innerHTML='<div class="card" style="max-width:640px"><h2 style="margin-top:0">¡Pedido registrado!</h2><p>Quedó anotado el '+esc(r.fecha)+'. Te vamos a contactar por mail o celular para coordinar el retiro.</p><p><button class="btn sec" id="otro">Hacer otro pedido</button></p></div>';$('#otro').onclick=()=>cargarPrest();cargarPrest(false)}catch(e){msgE(m,e)}}}
+/* ---------- Panel (se entra solo con la dirección ...#acceso) ---------- */
+const PRE={club:{locales:'own',directo:false,aprobar:false,noticias:false,analitica:false,auditoria:false,becas:false,socios:false,cursos:false,datos:false,prestamos:false},at:{locales:'all',directo:true,aprobar:true,noticias:true,analitica:true,auditoria:true,becas:true,socios:true,cursos:true,datos:false,prestamos:true}};
+const PL=[['directo','Publicar sin necesitar aprobación'],['aprobar','Aprobar o rechazar cambios de otros locales'],['noticias','Gestionar noticias'],['analitica','Ver estadísticas de visitas'],['auditoria','Ver auditoría de cambios'],['becas','Ver la sección Becas'],['socios','Gestionar socios y credenciales'],['cursos','Gestionar visitas y/o cursos'],['datos','Exportar e importar archivos (incluye datos personales)'],['prestamos','Gestionar préstamos de materiales']];
+const TIPO={admin:'Administrador AT',at:'Usuario AT',club:'Usuario Club',custom:'Usuario'};
+const loginForm=e=>'<h1>Ingresar</h1><p class="sub">Acceso solo para usuarios autorizados.</p><form class="card" id="lg" style="max-width:420px"><label>Mail<input name="email" type="email" required autocomplete="username"></label><br><label>Contraseña<input name="password" type="password" required autocomplete="current-password"></label><p><button class="btn">Ingresar</button></p><div class="msg err" id="lgm">'+esc(e||'')+'</div></form>';
+async function panel(){const p=$('#panel');
+ const lg=e=>{navPanel();p.innerHTML=loginForm(e);$('#lg').onsubmit=async ev=>{ev.preventDefault();$('#lgm').textContent='Ingresando…';try{const j=await api('/login',Object.fromEntries(new FormData(ev.target)));TK=j.token;sessionStorage.setItem('tk',TK);localStorage.setItem('noTrack','1');panel()}catch(er){$('#lgm').textContent=er.message}}};
+ if(!TK)return lg();
+ try{ME=await api('/me')}catch(e){return lg(e.message)}
+ navPanel();
+ p.innerHTML='<div class="row"><h1 style="flex:1">'+esc(TIPO[ME.tipo]||'Panel')+'</h1><span class="sm">'+esc(ME.email)+'</span><button class="btn sec" id="out">Salir</button></div><div id="pc"></div>';
+ $('#out').onclick=()=>{TK='';ME=null;sessionStorage.removeItem('tk');navPanel();irInicio()};
+ adminUI()}
+function editor(l,adm,box,done){l=l||{id:'',nombre:'',categoria:'',descripcion:'',menu:[],novedades:'',descuento:'',condiciones:'',vigenteHasta:'',horario:'',direccion:'',telefono:'',imagen:'',activo:true};l.menu=l.menu||[];
+ box.innerHTML='<form class="card" id="lf"><h2 style="margin-top:0">'+esc(l.nombre||'Nuevo local')+'</h2>'+(adm?'<div class="g">'+fld('Nombre del local','nombre',l.nombre,'required')+'<label>Categoría<select name="categoria">'+['',...CATS].map(c=>'<option'+(c==l.categoria?' selected':'')+'>'+esc(c)+'</option>').join('')+'</select></label></div>':'')
+ +imgField('im',l.imagen)+fld('Descripción de la imagen (texto alternativo, para personas que no pueden verla)','imagenAlt',l.imagenAlt||'','maxlength="150"')+permisoChk+'<label>Descripción<input name="descripcion" value="'+esc(l.descripcion)+'" maxlength="300"></label><div class="g">'+fld('Dirección','direccion',l.direccion)+fld('Teléfono / WhatsApp','telefono',l.telefono)+fld('Horario','horario',l.horario)+fld('Promoción o descuento (ej: 20% en la cuota)','descuento',l.descuento)+fld('Condiciones (ej: con credencial)','condiciones',l.condiciones)+'<label>Promoción válida hasta<input type="date" name="vigenteHasta" value="'+esc(l.vigenteHasta)+'"></label></div>'
+ +'<h2>Menú y precios (hasta 6)</h2><div id="mr">'+(l.menu.length?l.menu:[null]).map(mrow).join('')+'</div><p><button type="button" class="btn sec" id="am">Agregar plato</button></p><label>Novedades<textarea name="novedades" maxlength="800">'+esc(l.novedades)+'</textarea></label>'
+ +(adm?'<p><label><input type="checkbox" name="activo" style="width:auto"'+(l.activo!==false?' checked':'')+'> Visible en la página</label></p>':'')+'<p><button class="btn">'+(ME.perms.directo?'Publicar':'Enviar para aprobación')+'</button></p><div class="msg" id="lm"></div></form>';
+ prevHook('im');$('#am').onclick=()=>{if(document.querySelectorAll('.mrow').length<6)$('#mr').insertAdjacentHTML('beforeend',mrow())};
+ $('#lf').onsubmit=async ev=>{ev.preventDefault();const m=$('#lm');m.className='msg';m.textContent='Enviando…';
+  try{const f=new FormData(ev.target),c={};for(const[k,v]of f.entries())c[k]=v;if(adm)c.activo=f.has('activo');c.permisoImagen=f.has('permisoImagen');
+   c.menu=[...document.querySelectorAll('.mrow')].map(r=>({n:r.querySelector('.n').value,p:r.querySelector('.p').value,d:r.querySelector('.d').value,a:r.querySelector('.a').checked}));
+   const fi=$('#im').files[0];if(fi)c.imagenData=await img2data(fi);const rr=await api('/propose',{localId:l.id,cambios:c});
+   m.className='msg ok';m.textContent=rr.aplicado?'Publicado. La página se actualiza en 1 o 2 minutos.':'Enviado. Queda pendiente de aprobación.';if(done)setTimeout(done,1400)}catch(e){msgE(m,e)}}}
+function adminUI(){const P=ME.perms,adm=ME.role=='admin';
+ const T=[P.aprobar&&['pend','Pendientes'],P.locales=='all'&&['locs','Locales'],P.locales=='own'&&['mio','Mi local'],P.noticias&&['nots','Noticias'],adm&&['users','Usuarios'],P.socios&&['socios','Socios'],P.cursos&&['curs','Visitas y/o cursos'],P.prestamos&&['prest','Préstamos'],P.becas&&['bec','Becas'],P.analitica&&['est','Estadísticas'],P.auditoria&&['aud','Auditoría'],P.auditoria&&['acept','Aceptaciones de términos']].filter(Boolean);
+ if(!T.length){$('#pc').innerHTML='<p class="msg err">Tu usuario todavía no tiene permisos asignados. Avisale al administrador.</p>';return}
+ $('#pc').innerHTML='<div class="tabs">'+T.map(t=>'<button data-s="'+t[0]+'">'+t[1]+'</button>').join('')+'</div><div id="sc"></div>';
+ const F={pend,locs,mio,nots,users,socios,curs,prest,bec,est,aud,acept};
+ const go=s=>{document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.s==s));$('#sc').innerHTML='<p class="sm">Cargando…</p>';Promise.resolve().then(()=>F[s]()).catch(e=>{$('#sc').innerHTML='<p class="msg err">'+esc(e.message)+'</p>'})};
+ document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.s));go(T[0][0])}
+async function mio(){const box=$('#sc'),[d,pe]=await Promise.all([api('/datos'),api('/pending')]),l=d.locales.find(x=>x.id==ME.local);CATS=d.categorias||CATS;
+ if(!l){box.innerHTML='<p class="msg err">Tu usuario no tiene un local asignado. Avisale al administrador.</p>';return}
+ let st=pe.pendientes.length?'<p class="msg">Tenés cambios enviados esperando aprobación.</p>':'';
+ if(pe.ultimo)st+='<p class="sm">Último resultado: '+(pe.ultimo.ok?'aprobado':'rechazado'+(pe.ultimo.motivo?' ('+esc(pe.ultimo.motivo)+')':''))+' · '+fdate(pe.ultimo.fecha)+'</p>';
+ box.innerHTML=(ME.perms.directo?'':'<p class="sub">Tus cambios se publican cuando el administrador los aprueba.</p>')+st+'<div id="ed"></div>';editor(l,false,$('#ed'),mio)}
+async function pend(){const sc=$('#sc'),[d,pe]=await Promise.all([api('/datos'),api('/pending')]);
+ sc.innerHTML=pe.pendientes.length?pe.pendientes.map((p,i)=>{const l=d.locales.find(x=>x.id==p.localId)||{},ds=dif(l,p.cambios);return '<div class="card" style="margin-bottom:12px"><b>'+esc(l.nombre||p.localId)+'</b> <span class="sm">· '+esc(p.email)+' · '+new Date(p.fecha).toLocaleString('es-AR')+'</span><div class="pre" style="margin:8px 0">'+(ds.length?ds.map(esc).join('\n'):'Sin diferencias')+'</div>'+(p.cambios.imagenData?'<img class="prev" src="'+p.cambios.imagenData+'" alt="Imagen propuesta">':'')+'<p class="row"><button class="btn" data-a="1" data-i="'+i+'">Aceptar y publicar</button><button class="btn no" data-a="0" data-i="'+i+'">Rechazar</button></p></div>'}).join(''):'<div class="vacio">No hay cambios pendientes.</div>';
+ sc.querySelectorAll('[data-i]').forEach(b=>b.onclick=async()=>{const a=b.dataset.a=='1',motivo=a?'':(prompt('Motivo del rechazo (opcional):')||'');b.disabled=true;try{await api('/decide',{pid:pe.pendientes[b.dataset.i].pid,aceptar:a,motivo});pend()}catch(e){alert(e.message);b.disabled=false}})}
+async function locs(){const sc=$('#sc'),full=ME.role=='admin'||ME.perms.directo;
+ sc.innerHTML=(full?'<p><button class="btn" id="nl">'+I('plus')+'Agregar local</button></p>':'')+'<div id="ll"><p class="sm">Cargando locales…</p></div><div id="ed"></div>';
+ const open=l=>{editor(l,full,$('#ed'),locs);$('#ed').scrollIntoView({behavior:'smooth'})};
+ if(full)$('#nl').onclick=()=>open(null);
+ try{const d=await api('/datos');CATS=d.categorias||CATS;
+  $('#ll').innerHTML=d.locales.length?d.locales.map((l,i)=>'<div class="card row" style="margin-bottom:8px"><b style="flex:1">'+esc(l.nombre)+' <span class="sm">'+esc(l.categoria)+(l.activo===false?' · oculto':'')+'</span></b><button class="btn sec" data-i="'+i+'">Editar</button></div>').join(''):'<div class="vacio">Todavía no hay locales. Tocá “Agregar local”.</div>';
+  $('#ll').querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>open(d.locales[b.dataset.i]))}
+ catch(e){$('#ll').innerHTML='<p class="msg err">No se pudieron cargar los locales: '+esc(e.message)+'</p>'}}
+async function nots(){const sc=$('#sc'),d=await api('/datos-noticias');
+ sc.innerHTML='<p><button class="btn" id="nn">Nueva noticia</button></p>'+d.noticias.map((n,i)=>'<div class="card row" style="margin-bottom:8px"><span class="sm">'+fdate(n.fecha)+'</span><b style="flex:1">'+(n.importante?'[Importante] ':'')+esc(n.titulo)+(n.activo===false?' (oculta)':'')+'</b><button class="btn sec" data-i="'+i+'">Editar</button></div>').join('')+'<div id="en"></div>';
+ const ed=n=>{n=n||{id:'',titulo:'',texto:'',imagen:'',importante:false,activo:true};
+  $('#en').innerHTML='<form class="card" id="nf"><h2 style="margin-top:0">'+(n.id?'Editar noticia':'Nueva noticia')+'</h2>'+fld('Título','titulo',n.titulo,'required maxlength="120"')+'<label>Novedad / texto<textarea name="contenido" maxlength="2000">'+esc(n.contenido||n.texto)+'</textarea></label>'+imgField('ni',n.imagen)+fld('Descripción de la imagen (texto alternativo)','imagenAlt',n.imagenAlt||'','maxlength="150"')+permisoChk+'<p><label><input type="checkbox" name="importante" style="width:auto"'+(n.importante?' checked':'')+'> Marcar como importante (muestra la etiqueta “Importante”)</label><label><input type="checkbox" name="activo" style="width:auto"'+(n.activo!==false?' checked':'')+'> Visible</label></p><p class="row"><button class="btn">Publicar</button>'+(n.id?'<button type="button" class="btn no" id="del">Eliminar</button>':'')+'</p><div class="msg" id="nm"></div></form>';
+  prevHook('ni');$('#nf').scrollIntoView({behavior:'smooth'});
+  const send=async c=>{const m=$('#nm');m.className='msg';m.textContent='Publicando…';try{await api('/noticia',c);m.className='msg ok';m.textContent='Listo. Se verá en la página en 1 o 2 minutos.';setTimeout(nots,900)}catch(e){msgE(m,e)}};
+  $('#nf').onsubmit=async ev=>{ev.preventDefault();const f=new FormData(ev.target),c={id:n.id,titulo:f.get('titulo'),contenido:f.get('contenido'),importante:f.has('importante'),activo:f.has('activo'),imagenAlt:f.get('imagenAlt'),permisoImagen:f.has('permisoImagen')};const fi=$('#ni').files[0];if(fi)c.imagenData=await img2data(fi);send(c)};
+  if(n.id)$('#del').onclick=()=>{if(confirm('¿Eliminar esta noticia?'))send({id:n.id,eliminar:true})}};
+ sc.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>ed(d.noticias[b.dataset.i]));$('#nn').onclick=()=>ed()}
+async function users(){const sc=$('#sc'),[u,d]=await Promise.all([api('/users'),api('/datos')]);
+ sc.innerHTML='<form class="card" id="uf"><h2 style="margin-top:0">Agregar o editar usuario</h2><div class="g"><label>Mail<input name="email" type="email" required></label><label>Contraseña (mín. 8; vacío = no cambia)<input name="password" type="text" autocomplete="off"></label><label>Tipo de usuario<select name="tipo"><option value="club">Usuario Club (solo su local)</option><option value="at">Usuario AT (todo menos gestionar usuarios)</option><option value="custom">Personalizado</option></select></label><label>Local asignado<select name="local"><option value="">—</option>'+d.locales.map(l=>'<option value="'+esc(l.id)+'">'+esc(l.nombre)+'</option>').join('')+'</select></label></div>'
+ +'<h2>Qué puede modificar</h2><label>Locales<select name="p_locales"><option value="none">Ninguno</option><option value="own">Solo su local (imágenes, menú, precios, descuentos, dirección…)</option><option value="all">Todos los locales y crear nuevos</option></select></label><p>'+PL.map(([k,t])=>'<label style="margin:6px 0"><input type="checkbox" name="p_'+k+'" style="width:auto"> '+t+'</label>').join('')+'<label style="margin:6px 0"><input type="checkbox" name="activo" checked style="width:auto"> Usuario activo</label></p><p class="sm">Agregar, editar y eliminar usuarios es siempre exclusivo del administrador.</p><p class="row"><button class="btn">Guardar usuario</button><button type="button" class="btn sec" id="ucl">Limpiar</button></p><div class="msg" id="um"></div></form>'
+ +'<h2>Usuarios cargados</h2><div class="tw"><table><tr><th>Mail</th><th>Tipo</th><th>Local</th><th>Estado</th><th></th></tr>'+(u.usuarios.length?u.usuarios.map((x,i)=>'<tr><td>'+esc(x.email)+'</td><td>'+esc(TIPO[x.tipo]||'Usuario')+'</td><td>'+esc((d.locales.find(l=>l.id==x.local)||{}).nombre||x.local||'—')+'</td><td>'+(x.activo===false?'Inactivo':'Activo')+'</td><td><button class="btn sec" data-e="'+i+'">Editar</button> <button class="btn no" data-x="'+i+'" style="padding:11px 16px">Eliminar</button></td></tr>').join(''):'<tr><td colspan="5">Todavía no hay usuarios.</td></tr>')+'</table></div>';
+ const F=$('#uf'),setP=p=>{F.p_locales.value=p.locales;PL.forEach(([k])=>F['p_'+k].checked=!!p[k])};setP(PRE.club);
+ F.tipo.onchange=()=>{if(PRE[F.tipo.value])setP(PRE[F.tipo.value])};
+ sc.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{const x=u.usuarios[b.dataset.e];F.email.value=x.email;F.password.value='';F.tipo.value=x.tipo||'club';F.local.value=x.local||'';F.activo.checked=x.activo!==false;setP(x.perms||PRE.club);F.scrollIntoView({behavior:'smooth'})});
+ sc.querySelectorAll('[data-x]').forEach(b=>b.onclick=async()=>{const x=u.usuarios[b.dataset.x];if(confirm('¿Eliminar al usuario '+x.email+'? No podrá volver a ingresar.')){try{await api('/user-del',{email:x.email});users()}catch(e){alert(e.message)}}});
+ $('#ucl').onclick=()=>{F.reset();setP(PRE.club)};
+ F.onsubmit=async ev=>{ev.preventDefault();const m=$('#um');m.className='msg';m.textContent='Guardando…';const p={locales:F.p_locales.value};PL.forEach(([k])=>p[k]=F['p_'+k].checked);
+  try{await api('/user',{email:F.email.value,password:F.password.value,tipo:F.tipo.value,local:F.local.value,activo:F.activo.checked,perms:p});m.className='msg ok';m.textContent='Guardado.';setTimeout(users,900)}catch(e){msgE(m,e)}}}
+/* ---------- Archivos CSV (se abren con Excel) ---------- */
+const csvCell=v=>{v=String(v==null?'':v);if(/^[=+\-@]/.test(v))v="'"+v;return /[;"\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+const csvOut=(cols,rows)=>'\ufeff'+[cols.join(';'),...rows.map(r=>cols.map(c=>csvCell(r[c])).join(';'))].join('\r\n');
+function csvSave(name,text){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),3000)}
+function csvParse(t){t=t.replace(/^\ufeff/,'');const l1=t.split(/\r?\n/)[0],d=l1.split(';').length>=l1.split(',').length?';':',',rows=[];let row=[],cur='',q=false;
+ for(let i=0;i<t.length;i++){const c=t[i];if(q){if(c=='"'){if(t[i+1]=='"'){cur+='"';i++}else q=false}else cur+=c}else if(c=='"')q=true;else if(c==d){row.push(cur);cur=''}else if(c=='\n'||c=='\r'){if(c=='\r'&&t[i+1]=='\n')i++;row.push(cur);cur='';if(row.some(x=>x.trim()))rows.push(row);row=[]}else cur+=c}
+ row.push(cur);if(row.some(x=>x.trim()))rows.push(row);
+ const h=(rows.shift()||[]).map(x=>x.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z_]/g,''));
+ return rows.map(r=>Object.fromEntries(h.map((k,i)=>[k,(r[i]||'').trim().replace(/^'(?=[=+\-@])/,'')])))}
+async function pedirArchivo(inp){const f=inp.files[0];inp.value='';if(!f)return null;const b=await f.arrayBuffer();let t;try{t=new TextDecoder('utf-8',{fatal:true}).decode(b)}catch(e){t=new TextDecoder('windows-1252').decode(b)}return csvParse(t)}
+const CSVA=['id','tipo','titulo','descripcion','fecha','lugar','cupo','precio','estado'],CSVI=['curso','fecha_inscripcion','nombre','dni','legajo','carrera','mail','celular'],CSVN=['nombre','dni','legajo','carrera','mail','celular'];
+const okMsg=(m,t)=>{m.className='msg ok';m.textContent=t};
+async function socios(){const sc=$('#sc');
+ sc.innerHTML='<div class="card"><div class="g"><label>Buscar (nombre, DNI o legajo)<input id="sq"></label><label>Estado<select id="se"><option value="">Todos</option><option value="pendiente">Pendientes</option><option value="activo">Activos</option><option value="inactivo">Inactivos</option><option value="rechazado">Rechazados</option></select></label><label>Vigencia al aprobar o reactivar<input type="date" id="sv" value="'+new Date().getFullYear()+'-12-31"></label></div><p class="row"><button class="btn sec" id="sb">Buscar</button></p></div><div id="sl" style="margin-top:16px"></div><div id="sed"></div>';
+ const acc=x=>(x.estado=='pendiente'?'<button class="btn" data-a="aprobar" data-id="'+x.id+'">Aprobar</button><button class="btn no" data-a="rechazar" data-id="'+x.id+'">Rechazar</button>':x.estado=='activo'?'<button class="btn sec" data-a="desactivar" data-id="'+x.id+'">Desactivar</button>':'<button class="btn sec" data-a="reactivar" data-id="'+x.id+'">Reactivar</button>')+'<button class="btn sec" data-ed="'+x.id+'">Editar</button>';
+ const editS=(x,load)=>{$('#sed').innerHTML='<form class="card" id="sf" style="margin-top:16px"><h2 style="margin-top:0">Editar socio</h2><div class="g">'+fld('Nombre completo','nombre',x.nombre,'required maxlength="80"')+fld('DNI','dni',x.dni,'required inputmode="numeric" pattern="\\d{7,8}" maxlength="8"')+fld('Legajo','legajo',x.legajo,'required inputmode="numeric" pattern="\\d{5}" maxlength="5"')+'<label>Carrera<select name="carrera" required>'+carrOpts()+'</select></label><label>Estado<select name="estado"><option value="pendiente">Pendiente</option><option value="activo">Activo</option><option value="inactivo">Inactivo</option><option value="rechazado">Rechazado</option></select></label><label>Vigencia de la credencial (vacío = sin vencimiento)<input type="date" name="vence" value="'+esc(x.vence||'')+'"></label></div><p class="row"><button class="btn">Guardar cambios</button><button type="button" class="btn sec" id="sx">Cancelar</button></p><div class="msg" id="sfm"></div></form>';
+  const f=$('#sf');f.carrera.value=x.carrera;f.estado.value=x.estado;f.scrollIntoView({behavior:'smooth'});$('#sx').onclick=()=>{$('#sed').innerHTML=''};
+  f.onsubmit=async ev=>{ev.preventDefault();const m=$('#sfm');try{await api('/socios/editar',{...Object.fromEntries(new FormData(f)),id:x.id});okMsg(m,'Guardado.');setTimeout(()=>{$('#sed').innerHTML='';load()},700)}catch(e){msgE(m,e)}}};
+ const load=async()=>{const r=await api('/socios?estado='+encodeURIComponent($('#se').value)+'&q='+encodeURIComponent($('#sq').value)),n=Object.fromEntries(r.resumen.map(x=>[x.estado,x.n])),by=Object.fromEntries(r.socios.map(x=>[x.id,x]));
+  $('#sl').innerHTML='<p class="sm">Pendientes: '+(n.pendiente||0)+' · Activos: '+(n.activo||0)+' · Inactivos: '+(n.inactivo||0)+' · Rechazados: '+(n.rechazado||0)+'</p><div class="tw"><table><tr><th>Nombre</th><th>DNI</th><th>Legajo</th><th>Carrera</th><th>Estado y vigencia</th><th></th></tr>'+(r.socios.length?r.socios.map(x=>'<tr><td>'+esc(x.nombre)+'</td><td>'+esc(x.dni)+'</td><td>'+esc(x.legajo)+'</td><td>'+esc(x.carrera)+'</td><td>'+esc(x.estado)+(x.vence?' · hasta '+fdate(x.vence):x.estado=='activo'?' · sin vencimiento':'')+'</td><td><span class="row">'+acc(x)+'</span></td></tr>').join(''):'<tr><td colspan="6">Sin resultados.</td></tr>')+'</table></div>';
+  $('#sl').querySelectorAll('[data-a]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{await api('/socios/decidir',{id:b.dataset.id,accion:b.dataset.a,vence:$('#sv').value});load()}catch(e){alert(e.message);b.disabled=false}});
+  $('#sl').querySelectorAll('[data-ed]').forEach(b=>b.onclick=()=>editS(by[b.dataset.ed],load))};
+ $('#sb').onclick=load;$('#se').onchange=load;$('#sq').onkeydown=e=>{if(e.key=='Enter')load()};await load()}
+async function curs(){const sc=$('#sc'),d=await api('/cursos-admin'),dt=ME.perms.datos;
+ sc.innerHTML='<div class="card"><label class="chk" style="margin:0"><input type="checkbox" id="ct"'+(d.activo?' checked':'')+'><span>Mostrar la sección “Visitas y/o cursos” en la página</span></label><div class="msg" id="cm"></div></div>'
+ +(dt?'<div class="card" style="margin-top:16px"><h2 style="margin-top:0">Archivos (Excel o CSV)</h2><p class="sm">Se abren con Excel. Los archivos incluyen datos personales: guardalos con cuidado.</p><p class="row"><button class="btn sec" id="xa">Exportar actividades</button><button class="btn sec" id="xi">Exportar todos los inscriptos</button><button class="btn sec" id="ta">Descargar plantilla</button></p><label>Importar actividades desde un archivo CSV<input type="file" id="ia" accept=".csv,text/csv"></label></div>':'')
+ +'<p style="margin-top:16px"><button class="btn" id="nc">'+I('plus')+'Nueva visita o curso</button></p>'
+ +d.items.map((c,i)=>'<div class="card row" style="margin-bottom:8px"><span class="sm">'+(c.tipo=='visita'?'Visita':'Curso')+'</span><b style="flex:1">'+esc(c.titulo)+' <span class="sm">· '+esc(c.estado)+' · '+c.insc+(c.cupo?'/'+c.cupo:'')+' inscriptos</span></b><button class="btn sec" data-v="'+i+'">Inscriptos</button><button class="btn sec" data-e="'+i+'">Editar</button></div>').join('')+'<div id="ce"></div>';
+ $('#ct').onchange=async e=>{const m=$('#cm');try{await api('/cursos-toggle',{activo:e.target.checked});okMsg(m,e.target.checked?'La sección Visitas y/o cursos ya se ve en la página.':'La sección Visitas y/o cursos quedó oculta.')}catch(er){e.target.checked=!e.target.checked;msgE(m,er)}};
+ if(dt){const m=$('#cm');
+  $('#xa').onclick=async()=>{try{const r=await api('/export?tipo=cursos');csvSave('actividades.csv',csvOut(CSVA,r.rows))}catch(e){msgE(m,e)}};
+  $('#xi').onclick=async()=>{try{const r=await api('/export?tipo=inscripciones');csvSave('inscriptos.csv',csvOut(CSVI,r.rows.map(x=>({...x,fecha_inscripcion:new Date(x.ts).toLocaleString('es-AR')}))))}catch(e){msgE(m,e)}};
+  $('#ta').onclick=()=>csvSave('plantilla_actividades.csv',csvOut(CSVA,[{tipo:'visita',titulo:'Visita a la planta',descripcion:'Recorrido guiado',fecha:'10/12 a las 9 hs',lugar:'Parque industrial',cupo:20,precio:'',estado:'abierto'}]));
+  $('#ia').onchange=async e=>{const rows=await pedirArchivo(e.target);if(!rows)return;if(!rows.length){msgE(m,new Error('El archivo está vacío o no tiene encabezados.'));return}
+   if(!confirm('Se van a importar '+rows.length+' actividades (las que traigan id se actualizan). ¿Continuar?'))return;
+   try{const r=await api('/import/cursos',{rows});okMsg(m,'Listo: '+r.nuevos+' nuevas y '+r.actualizados+' actualizadas.'+(r.errores.length?' Con problemas: '+r.errores.join(' · '):''));setTimeout(curs,2200)}catch(er){msgE(m,er)}}}
+ const ed=c=>{c=c||{id:'',tipo:'curso',titulo:'',descripcion:'',fecha:'',lugar:'',cupo:0,precio:'',estado:'borrador'};const so=(a,v)=>a.map(x=>'<option value="'+x[0]+'"'+(x[0]==v?' selected':'')+'>'+x[1]+'</option>').join('');
+  $('#ce').innerHTML='<form class="card" id="cf"><h2 style="margin-top:0">'+(c.id?'Editar':'Nueva')+'</h2><div class="g"><label>Tipo<select name="tipo">'+so([['curso','Curso'],['visita','Visita']],c.tipo)+'</select></label><label>Estado<select name="estado">'+so([['borrador','Borrador (no se ve)'],['abierto','Inscripción abierta'],['cerrado','Inscripción cerrada']],c.estado)+'</select></label>'+fld('Título','titulo',c.titulo,'required maxlength="120"')+fld('Fecha y hora (ej: 10/12 a las 9 hs)','fecha',c.fecha)+fld('Lugar o modalidad','lugar',c.lugar)+fld('Precio (vacío = gratis)','precio',c.precio)+fld('Cupo (0 = sin límite)','cupo',c.cupo,'inputmode="numeric"')+'</div><label>Descripción<textarea name="descripcion" maxlength="1000">'+esc(c.descripcion)+'</textarea></label><p class="row"><button class="btn">Guardar</button>'+(c.id?'<button type="button" class="btn no" id="cdel">Eliminar</button>':'')+'</p><div class="msg" id="cfm"></div></form>';
+  $('#cf').scrollIntoView({behavior:'smooth'});
+  $('#cf').onsubmit=async ev=>{ev.preventDefault();const m=$('#cfm');try{await api('/curso',{...Object.fromEntries(new FormData(ev.target)),id:c.id});okMsg(m,'Guardado.');setTimeout(curs,700)}catch(e){msgE(m,e)}};
+  if(c.id)$('#cdel').onclick=async()=>{if(confirm('¿Eliminar esta actividad y todas sus inscripciones?')){await api('/curso-del',{id:c.id});curs()}}};
+ sc.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>ed(d.items[b.dataset.e]));$('#nc').onclick=()=>ed();
+ sc.querySelectorAll('[data-v]').forEach(b=>b.onclick=async()=>{const c=d.items[b.dataset.v],r=await api('/inscripciones?cursoId='+encodeURIComponent(c.id));
+  $('#ce').innerHTML='<h2>Inscriptos en “'+esc(c.titulo)+'”</h2>'+(dt?'<p class="row"><button class="btn sec" id="xv">Exportar este listado</button><button class="btn sec" id="tv">Descargar plantilla</button></p><label>Importar inscriptos desde un archivo CSV<input type="file" id="iv" accept=".csv,text/csv"></label><div class="msg" id="vm"></div>':'')+tabla('',['Nombre','DNI','Legajo','Carrera','Mail','Celular'],r.items.map(x=>[x.nombre,x.dni,x.legajo,x.carrera,x.mail,x.celular]));
+  if(dt){const m=$('#vm');
+   $('#xv').onclick=async()=>{try{const q=await api('/export?tipo=inscripciones&cursoId='+encodeURIComponent(c.id));csvSave('inscriptos_'+c.titulo.replace(/[^\wÀ-ÿ]+/g,'_')+'.csv',csvOut(CSVI,q.rows.map(x=>({...x,fecha_inscripcion:new Date(x.ts).toLocaleString('es-AR')}))))}catch(e){msgE(m,e)}};
+   $('#tv').onclick=()=>csvSave('plantilla_inscriptos.csv',csvOut(CSVN,[{nombre:'Ana Pérez',dni:'30111222',legajo:'11111',carrera:'Ingeniería Civil',mail:'ana@mail.com',celular:'3815550000'}]));
+   $('#iv').onchange=async e=>{const rows=await pedirArchivo(e.target);if(!rows)return;if(!rows.length){msgE(m,new Error('El archivo está vacío o no tiene encabezados.'));return}
+    rows.forEach(x=>{if(/^\d{1,4}$/.test(x.legajo||''))x.legajo=x.legajo.padStart(5,'0')});
+    if(!confirm('Se van a importar '+rows.length+' inscriptos en “'+c.titulo+'”. Los datos importados no registran la aceptación de los términos. ¿Continuar?'))return;
+    try{const q=await api('/import/inscripciones',{cursoId:c.id,rows});okMsg(m,'Listo: '+q.insertados+' cargados, '+q.duplicados+' repetidos.'+(q.errores.length?' Con problemas: '+q.errores.join(' · '):''));setTimeout(()=>sc.querySelector('[data-v="'+b.dataset.v+'"]').click(),2200)}catch(er){msgE(m,er)}}}
+  $('#ce').scrollIntoView({behavior:'smooth'})})}
+const quien=(u,t)=>u?'<b>'+esc(u)+'</b><br><span class="sm">'+new Date(t).toLocaleString('es-AR')+'</span>':'<span class="sm">—</span>';
+async function prest(){const sc=$('#sc'),EST=['pendiente','entregado','devuelto','cancelado'],fh=h=>h?h.slice(8,10)+'/'+h.slice(5,7)+'/'+h.slice(0,4)+' '+h.slice(11,16):'';
+ sc.innerHTML='<div class="card"><div class="g"><label>Buscar (nombre, legajo o material)<input id="pq"></label><label>Estado<select id="pe"><option value="">Todos</option><option value="pendiente">Pendientes</option><option value="entregado">Entregados</option><option value="devuelto">Devueltos</option><option value="cancelado">Cancelados</option></select></label></div><p class="row"><button class="btn sec" id="pb">Buscar</button></p></div><div id="prr" style="margin-top:16px"></div><h2>Materiales para prestar</h2><p><button class="btn" id="nm">'+I('plus')+'Agregar material</button></p><div id="mtl"></div><div id="mte"></div>';
+ const loadM=async()=>{const lm=await api('/materiales');
+  $('#mtl').innerHTML=lm.items.length?lm.items.map((m,i)=>'<div class="card row" style="margin-bottom:8px"><b style="flex:1">'+esc(m.nombre)+' <span class="sm">· '+(m.activo?'visible':'oculto')+' · '+m.usados+' prestados de '+m.stock+'</span></b><button class="btn sec" data-m="'+i+'">Editar</button></div>').join(''):'<div class="vacio">Todavía no cargaste materiales. Tocá “Agregar material”.</div>';
+  $('#mtl').querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>ed(lm.items[b.dataset.m]))};
+ const ed=m=>{m=m||{id:'',nombre:'',descripcion:'',stock:1,activo:1};
+  $('#mte').innerHTML='<form class="card" id="mf"><h2 style="margin-top:0">'+(m.id?'Editar':'Nuevo')+' material</h2><div class="g">'+fld('Nombre (ej: Set de mate)','nombre',m.nombre,'required maxlength="80"')+fld('Cantidad de unidades','stock',m.stock,'required inputmode="numeric"')+'</div><br>'+fld('Descripción (opcional)','descripcion',m.descripcion,'maxlength="200"')+'<label class="chk"><input type="checkbox" name="activo"'+(m.activo?' checked':'')+'><span>Mostrar en el desplegable de la página</span></label><p class="row"><button class="btn">Guardar</button>'+(m.id?'<button type="button" class="btn no" id="mdel">Eliminar</button>':'')+'</p><div class="msg" id="mfm"></div></form>';
+  const f=$('#mf');f.scrollIntoView({behavior:'smooth'});
+  f.onsubmit=async ev=>{ev.preventDefault();const k=$('#mfm'),d=Object.fromEntries(new FormData(f));try{await api('/material',{id:m.id,nombre:d.nombre,descripcion:d.descripcion,stock:d.stock,activo:f.activo.checked});okMsg(k,'Guardado. Ya aparece en el desplegable de la página.');loadM();setTimeout(()=>{$('#mte').innerHTML=''},1200)}catch(e){msgE(k,e)}};
+  if(m.id)$('#mdel').onclick=async()=>{if(confirm('¿Eliminar este material?')){await api('/material-del',{id:m.id});$('#mte').innerHTML='';loadM()}}};
+ const load=async()=>{const r=await api('/prestamos-admin?estado='+encodeURIComponent($('#pe').value)+'&q='+encodeURIComponent($('#pq').value));
+  $('#prr').innerHTML='<div class="tw"><table><tr><th>Pedido (fecha y hora)</th><th>Material</th><th>Nombre</th><th>Carrera</th><th>Legajo</th><th>Mail</th><th>Celular</th><th>Retiro</th><th>Estado</th><th>Entregó (usuario y hora)</th><th>Recibió la devolución (usuario y hora)</th></tr>'+(r.items.length?r.items.map(x=>'<tr><td>'+new Date(x.ts).toLocaleString('es-AR')+'</td><td>'+esc(x.material)+'</td><td>'+esc(x.nombre)+'</td><td>'+esc(x.carrera)+'</td><td>'+esc(x.legajo)+'</td><td>'+esc(x.mail)+'</td><td>'+esc(x.celular)+'</td><td>'+fh(x.retiro)+'</td><td><select data-id="'+x.id+'" aria-label="Estado del pedido">'+EST.map(e=>'<option'+(e==x.estado?' selected':'')+'>'+e+'</option>').join('')+'</select></td><td>'+quien(x.entregado_por,x.entregado_ts)+'</td><td>'+quien(x.devuelto_por,x.devuelto_ts)+'</td></tr>').join(''):'<tr><td colspan="11">No hay pedidos.</td></tr>')+'</table></div>';
+  $('#prr').querySelectorAll('select[data-id]').forEach(sl=>sl.onchange=async()=>{try{await api('/prestamos/estado',{id:sl.dataset.id,estado:sl.value});load();loadM()}catch(e){alert(e.message);load()}})};
+ $('#pb').onclick=load;$('#pe').onchange=load;$('#pq').onkeydown=e=>{if(e.key=='Enter')load()};$('#nm').onclick=()=>ed();
+ await Promise.all([load(),loadM()])}
+async function acept(){const r=await api('/aceptaciones');
+ $('#sc').innerHTML='<p class="sm">Versión vigente de los términos: <b>'+esc(r.version)+'</b>. Se muestran las últimas 300 aceptaciones. Si una persona pidió la baja, se borran su nombre, DNI, legajo e IP y queda solo la constancia.</p>'+tabla('',['Fecha y hora','Quién aceptó','DNI','Legajo','Qué aceptó','Versión'],r.items.map(x=>[new Date(x.ts).toLocaleString('es-AR'),x.nombre||'(dado de baja)',x.dni||'—',x.legajo||'—',x.tipo+(x.detalle?': '+x.detalle:''),x.version]))}
+const clubStats=k=>{const R=[['Hoy',k.resumen.hoy],['Últimos 7 días',k.resumen.semana],['Últimos 30 días',k.resumen.mes],['Último año',k.resumen.anio]],n=Object.fromEntries(k.socios.map(x=>[x.estado,x.n]));
+ return '<h2 style="margin-top:0">Uso de la credencial en los comercios</h2><div class="kpis">'+R.map(([t,r])=>'<div><span class="sm">'+t+'</span><b>'+(r.v||0)+'</b><span class="sm">usos · '+(r.s||0)+' socios distintos</span></div>').join('')+'</div><p class="sm">Socios: '+(n.activo||0)+' activos · '+(n.pendiente||0)+' pendientes · '+(n.inactivo||0)+' inactivos. Intentos con credencial inactiva (30 días): '+k.rechazos+'.</p>'+tabla('Uso por comercio (30 días)',['Comercio','Usos','Socios distintos'],k.porLocal.map(r=>[r.local_nombre,r.usos,r.socios]))};
+const fm=s=>{s=Math.round(s||0);return s>=60?Math.floor(s/60)+' min '+s%60+' s':s+' s'};
+const SECN={inicio:'Inicio',becas:'Becas',club:'Club AT',noticias:'Novedades',contacto:'Contacto'},CLN={'inscribirme-hero':'Botón Inscribirme (portada)',inscribirme:'Botón Inscribirme (Becas)',instagram:'Instagram','wa-casa':'Canal WhatsApp Casa Central','wa-anexo':'Canal WhatsApp Anexo Concepción'};
+const tabla=(t,h,rows)=>'<h2>'+t+'</h2><div class="tw"><table><tr>'+h.map(x=>'<th>'+x+'</th>').join('')+'</tr>'+(rows.length?rows.map(r=>'<tr>'+r.map(c=>'<td>'+esc(c)+'</td>').join('')+'</tr>').join(''):'<tr><td colspan="'+h.length+'">Sin datos todavía.</td></tr>')+'</table></div>';
+async function est(){const sc=$('#sc'),s=await api('/stats');
+ const R=[['Hoy',s.resumen.hoy],['Últimos 7 días',s.resumen.semana],['Últimos 30 días',s.resumen.mes],['Último año',s.resumen.anio]],mx=Math.max(1,...s.serie.map(x=>x.v)),mh=Math.max(1,...s.horas.map(x=>x.n));
+ const top={};s.ipsec.forEach(r=>{if(!top[r.ip])top[r.ip]=r.seccion});const pico=s.horas.slice().sort((a,b)=>b.n-a.n)[0];
+ sc.innerHTML=clubStats(s.club)+'<h2>Visitas a la página</h2><div class="kpis">'+R.map(([t,r])=>'<div><span class="sm">'+t+'</span><b>'+(r.v||0)+'</b><span class="sm">visitas · '+(r.u||0)+' IP distintas</span></div>').join('')+'</div>'
+ +'<h2>Visitas por día (últimos 30 días)</h2><div class="card"><div style="display:flex;align-items:flex-end;gap:3px;height:120px">'+s.serie.map(x=>'<div class="bar" title="'+fdate(x.dia)+': '+x.v+' visitas, '+x.u+' IP" style="height:'+Math.max(4,x.v/mx*100)+'%"></div>').join('')+'</div><p class="sm">Pasá el mouse o el dedo sobre cada barra para ver el detalle. IP que volvieron más de una vez en 30 días: <b>'+s.recurrentes+'</b>'+(pico?' · Hora de más visitas: <b>'+pico.hora+' hs</b>':'')+'</p></div>'
+ +tabla('Dónde pasan más tiempo (30 días)',['Sección','Vistas','Tiempo total','Promedio por vista'],s.secciones.map(r=>[SECN[r.seccion]||r.seccion,r.vistas,fm(r.total),fm(r.prom)]))
+ +tabla('Visitas por IP (30 días)',['IP','Lugar','Visitas','Tiempo total','Sección donde más estuvo','Última visita'],s.ips.map(r=>[r.ip,[r.ciudad,r.pais].filter(Boolean).join(', ')||'—',r.sesiones,fm(r.tiempo),SECN[top[r.ip]]||top[r.ip]||'—',new Date(r.ultima).toLocaleString('es-AR')]))
+ +tabla('Desde dónde ingresan',['País','Región','Ciudad','Visitas'],s.lugares.map(r=>[r.pais||'—',r.region||'—',r.ciudad||'—',r.sesiones]))
+ +tabla('Dispositivos',['Dispositivo','Visitas'],s.disp.map(r=>[r.disp,r.n]))+tabla('Cómo llegaron',['Origen','Visitas'],s.refs.map(r=>[r.ref,r.n]))
+ +tabla('Clics en botones importantes',['Botón','Clics'],s.clics.map(r=>[CLN[r.seccion]||r.seccion,r.n]))
+ +'<h2>Visitas por hora del día</h2><div class="card"><div style="display:flex;align-items:flex-end;gap:3px;height:90px">'+Array.from({length:24},(_,h)=>{const x=s.horas.find(y=>y.hora==h)||{n:0};return '<div class="bar" title="'+h+' hs: '+x.n+' visitas" style="height:'+Math.max(3,x.n/mh*100)+'%"></div>'}).join('')+'</div><p class="sm">De 0 a 23 hs (hora de Argentina).</p></div>'
+ +'<p class="sm">Las IP y ubicaciones son datos personales: usalas solo con fines estadísticos y no las compartas.</p>'}
+function bec(){$('#sc').innerHTML='<div class="card"><h2 style="margin-top:0">Becas de fotocopias</h2><ol><li>Compartí el formulario con los estudiantes (se abre y cierra desde Google Forms, pestaña Respuestas).</li><li>Cuando cierre la inscripción, abrí la hoja de respuestas y usá el menú <b>Sorteo AT → 2) Hacer sorteo</b>. Elegís la cantidad de ganadores (por ejemplo 50) y se hace la animación.</li><li>Los ganadores quedan guardados solo en esa hoja privada. Al mes siguiente usá <b>Sorteo AT → 3) Nuevo mes</b>.</li></ol><p class="row">'+(CFG.FORM_URL?'<a class="btn sec" target="_blank" rel="noopener" href="'+esc(CFG.FORM_URL)+'">Abrir formulario</a>':'')+(CFG.SHEET_URL?'<a class="btn" target="_blank" rel="noopener" href="'+esc(CFG.SHEET_URL)+'">Abrir hoja del sorteo</a>':'<span class="sm">Falta cargar SHEET_URL en index.html.</span>')+'</p></div>'}
+async function aud(){const a=await api('/audit');$('#sc').innerHTML='<div class="tw"><table><tr><th>Fecha y hora</th><th>Usuario</th><th>Acción</th><th>Referencia</th><th>Detalle</th></tr>'+a.items.map(r=>'<tr><td>'+new Date(r.f).toLocaleString('es-AR')+'</td><td>'+esc(r.u)+'</td><td>'+esc(r.a)+'</td><td>'+esc(r.r)+'</td><td class="pre">'+esc(r.d)+'</td></tr>').join('')+'</table></div>'}
+function bajaInit(){
+ $('#fbs').onsubmit=async ev=>{ev.preventDefault();const m=$('#fbsm');m.className='msg';if(!confirm('¿Eliminar tu credencial y tus datos de socio? No se puede deshacer.'))return;m.textContent='Procesando…';
+  try{const j=await api('/socio/login',Object.fromEntries(new FormData(ev.target)),''),r=await api('/socio/baja',{},j.token);SOC='';localStorage.removeItem('soc');okMsg(m,'Listo: eliminamos tu credencial y tus datos de socio.');ev.target.reset()}catch(e){msgE(m,e)}};
+ $('#fbi').onsubmit=async ev=>{ev.preventDefault();const m=$('#fbim');m.className='msg';if(!confirm('¿Eliminar tus datos de inscripciones y préstamos? No se puede deshacer.'))return;m.textContent='Procesando…';
+  try{const r=await api('/baja',Object.fromEntries(new FormData(ev.target)),'');const n=r.inscripciones+r.prestamos;
+   if(r.sinDevolver){m.className='msg err';m.textContent='Tenés un material sin devolver: devolvelo y después podés eliminar ese pedido.'+(n?' Ya eliminamos el resto ('+n+').':'')}
+   else if(!n){m.className='msg err';m.textContent='No encontramos datos con esa combinación de legajo, DNI y mail.'}else{okMsg(m,'Listo: eliminamos '+n+' registro'+(n>1?'s':'')+'.');ev.target.reset()}}catch(e){msgE(m,e)}}}
+bajaInit();
+navPanel();cargarCursos();cargarPrest();const h0=location.hash.slice(1);if(h0.startsWith('v='))verif(h0.slice(2));else show(h0=='acceso'?'panel':(h0||'becas'));iniciarVisitas();
+addEventListener('load',()=>scrollTo({top:0,behavior:'instant'}));
+</script></body></html>
